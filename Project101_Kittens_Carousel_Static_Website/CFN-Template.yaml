@@ -1,0 +1,51 @@
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: !Ref LatestAmiId
+      InstanceType: t2.micro
+      KeyName: "shahin-key"
+      SecurityGroups: 
+        - !Ref SecurityGroup
+      UserData: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+          cd /var/www/html
+          curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/main/Project101_Kittens_Carousel_Static_Website/static-website/index.html
+          systemctl restart httpd
+      Tags:  
+        - Key: Name
+          Value: Web Server of my-stack
+  # Security Group for the EC2 instance
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      # VpcId: !Ref Your-Custom-VPC  # Replace with your VPC ID reference if needed
+                                     # If you do not specify a VPC, the default is to use the default VPC for the Region.
+      SecurityGroupIngress:
+        # Allow SSH access
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+        # Allow HTTP access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+
+Parameters:
+  LatestAmiId:
+    Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+
+Outputs:
+  WebsiteURL:
+    Description: "URL of the Kittens Carousel Application"
+    Value: !Sub "http://${Instance.PublicDnsName}"
