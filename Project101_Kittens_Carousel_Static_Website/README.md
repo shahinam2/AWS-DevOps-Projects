@@ -2,6 +2,8 @@
 
 This project demonstrates how to deploy a static website on an AWS EC2 instance using AWS CloudFormation. The website features a carousel of kitten images and is hosted on an Apache web server.
 
+<img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1743001746879/215e7470-a842-443b-98b9-1f2d82695e25.gif" width="500" height="auto" />
+
 ## Project Structure
 ```
 ├── CFN-Template.yaml  # CloudFormation template for deploying the resources
