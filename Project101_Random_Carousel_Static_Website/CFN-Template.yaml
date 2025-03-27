@@ -49,5 +49,5 @@ Parameters:
 
 Outputs:
   WebsiteURL:
-    Description: "URL of the Kittens Carousel Application"
+    Description: "URL of the Random Carousel Application"
     Value: !Sub "http://${Instance.PublicDnsName}"
