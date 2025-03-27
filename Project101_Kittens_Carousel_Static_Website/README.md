@@ -1,4 +1,4 @@
-# Project 101: Kittens Carousel Static Website
+# Project 101: Random Image Carousel Static Website
 
 This project demonstrates how to deploy a static website on an AWS EC2 instance using AWS CloudFormation. The website features a carousel of kitten images and is hosted on an Apache web server.
 
@@ -14,6 +14,8 @@ This CloudFormation template launches a t2.micro EC2 instance running Amazon Lin
 - Outputs the public URL of the instance.
 >🔐 Note: SSH and HTTP access are open to the world (0.0.0.0/0). Restrict in production.
 
+How it looks:  
+<img src="./readme-files/screenshot.png" width="500" height="auto" />
 
 ## Project Structure
 ```
@@ -49,6 +51,10 @@ This CloudFormation template launches a t2.micro EC2 instance running Amazon Lin
    aws cloudformation update-stack --stack-name my-stack --template-body file://CFN-Template.yaml --region <your-region>
    ```
 
-
+5. **Delete the Stack**
+   To delete the stack, use the following command:
+   ```sh
+   aws cloudformation delete-stack --stack-name my-stack --region <your-region>
+   ```
 
 
