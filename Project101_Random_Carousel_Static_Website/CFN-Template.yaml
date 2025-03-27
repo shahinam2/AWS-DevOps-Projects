@@ -15,8 +15,7 @@ Resources:
           systemctl start httpd
           systemctl enable httpd
           cd /var/www/html
-          mkdir assets
-          curl -o ./assets/clarusway-logo-black.png https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/assets/clarusway-logo-black.png 
+          curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/assets/clarusway-logo-black.png 
           curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/main/Project101_Kittens_Carousel_Static_Website/static-website/index.html
           systemctl restart httpd
       Tags:
