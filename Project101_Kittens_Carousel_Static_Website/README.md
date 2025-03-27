@@ -4,6 +4,17 @@ This project demonstrates how to deploy a static website on an AWS EC2 instance 
 
 <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1743001746879/215e7470-a842-443b-98b9-1f2d82695e25.gif" width="500" height="auto" />
 
+This CloudFormation template launches a t2.micro EC2 instance running Amazon Linux 2, installs Apache HTTP Server, and serves a static HTML file (index.html) from this repo.
+
+💡 What it does:
+- Uses the latest Amazon Linux 2 AMI via SSM.
+- Installs and starts Apache on launch.
+- Downloads the HTML from GitHub into /var/www/html.
+- Opens ports 22 (SSH) and 80 (HTTP) via a security group.
+- Outputs the public URL of the instance.
+>🔐 Note: SSH and HTTP access are open to the world (0.0.0.0/0). Restrict in production.
+
+
 ## Project Structure
 ```
 ├── CFN-Template.yaml  # CloudFormation template for deploying the resources
