@@ -37,13 +37,18 @@ How it looks:
    ```sh
    aws cloudformation create-stack --stack-name my-stack --template-body file://CFN-Template.yaml --region <your-region>
    ```
+
 2. **Check the Status of the Stack**
    Use the following command to check the status of the stack:
    ```sh
    aws cloudformation describe-stacks --stack-name my-stack --region <your-region>
    ```
-3. **Access the Website**
+
+3. **Access the Website URL**
    Once the stack is created successfully, you can access the website using the DNS address of the EC2 instance in the output section of the stack.
+   ```
+   aws cloudformation describe-stacks --stack-name my-stack --query "Stacks[0].Outputs[?OutputKey=='WebsiteURL'].OutputValue" --output text | cat
+   ```
 
 4. **Update the Stack**
    To update the stack, use the following command:
