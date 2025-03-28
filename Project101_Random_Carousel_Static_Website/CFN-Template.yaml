@@ -1,26 +1,48 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  LatestAmiId:
+    Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+
+  KeyPairParameter:
+    Description: Select your keypair.
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: "shahin-key"
+
+  InstanceTypeParameter:
+    Description: Select your instance type.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.nano
+      - t2.small
+
 Resources:
   Instance:
     Type: AWS::EC2::Instance
     Properties: 
       ImageId: !Ref LatestAmiId
-      InstanceType: t2.micro
-      KeyName: "shahin-key"
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref KeyPairParameter
       SecurityGroups: 
         - !Ref SecurityGroup
-      UserData: 
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          yum update -y
-          yum install -y httpd
-          systemctl start httpd
-          systemctl enable httpd
-          cd /var/www/html
-          curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/src/clarusway-logo-black.png 
-          curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/src/index.html
-          systemctl restart httpd
-      Tags:
+      Tags: 
         - Key: Name
-          Value: Web Server of my-stack
+          Value: !Sub "Web Server of ${AWS::StackName}"
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install -y httpd
+        systemctl start httpd
+        systemctl enable httpd
+        cd /var/www/html
+        curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/src/clarusway-logo-black.png 
+        curl -O https://raw.githubusercontent.com/shahinam2/AWS-Projects/refs/heads/main/Project101_Random_Carousel_Static_Website/src/index.html
+        systemctl restart httpd
+
   # Security Group for the EC2 instance
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -39,12 +61,6 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
-
-Parameters:
-  LatestAmiId:
-    Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
-    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 
 Outputs:
   WebsiteURL:
