@@ -29,7 +29,7 @@ How it looks:
 - AWS CLI installed and configured with appropriate permissions.
 - An existing key pair in the AWS region where the stack will be deployed. make sure to replace the `shahin-key` parameter in the CloudFormation template with the name of your key pair.
 - Make to change the region in the AWS CLI commands to the region where you want to deploy the stack.
-- SSM parameter `/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2` available for the latest Amazon Linux 2 AMI.
+- SSM parameter `/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64` available for the latest Amazon Linux 2 AMI.
 
 ## Deployment Steps
 1. **Create the CloudFormation Stack**
