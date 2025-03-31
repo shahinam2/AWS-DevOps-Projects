@@ -4,4 +4,4 @@ This repository contains a list of projects that I have worked on using AWS serv
 
 ### AWS projects from newest to oldest
 
-- Project101 Random Carousel Static Website
+- 01. Random Carousel Static Website
