@@ -2,7 +2,14 @@
 
 This project showcases how to automate the deployment of a Flask-based Roman Numeral Converter application on an AWS EC2 instance using AWS CloudFormation. The app is served using Gunicorn as the WSGI server and is fronted by Nginx acting as a reverse proxy. The entire infrastructure — including instance provisioning, package installation, and service configuration — is managed through a single CloudFormation template for seamless reproducibility and scalability.
 
+**Project Diagram:**  
 <img src="./readme-files/RomanNumeralsConverterDiagram.gif" width="500" height="auto" />
+
+**How it looks:**  
+Main page of the application:  
+<img src="./readme-files/AppMainPage.png" width="300" height="auto" />  
+Result page of the application:  
+<img src="./readme-files/AppResultPage.png" width="300" height="auto" />
 
 ### What it does:
 - Creates an EC2 instance with:  

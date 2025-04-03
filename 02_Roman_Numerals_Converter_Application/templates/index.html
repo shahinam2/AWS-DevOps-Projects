@@ -33,7 +33,7 @@
       display: inline-block;
       border: none;
       background: #f1f1f1;
-      font-size: 18px;
+      font-size: 16px;
     }
 
     button {
@@ -70,7 +70,7 @@
   <p>This application converts decimal numbers to Roman numerals. Only numbers from 1 to 3999 are allowed.</p><br>
   <form action="/" method="post">
     <label for="number"><b>Please Enter a Number:</b></label>
-    <input placeholder="" name="number" id="number" required />
+    <input placeholder="Enter your number here" name="number" id="number" required />
     <button type="submit" >Submit</button>
     {% if not_valid %}
     <p class="warning"><b>{{ error }}</b></p>
