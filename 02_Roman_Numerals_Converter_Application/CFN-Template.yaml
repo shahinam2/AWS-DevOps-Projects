@@ -33,17 +33,7 @@ Resources:
         - Key: Name
           Value: !Sub "Web Server of ${AWS::StackName}"
       UserData: !Base64 |
-        #!/bin/bash
-        yum update -y
-        yum install python3 python3-pip -y
-        pip3 install flask
-        cd /home/ec2-user
-        FOLDER="https://raw.githubusercontent.com/ilhanigit/02_Roman_Numerals_Converter_Application"
-        wget -P templates ${FOLDER}/templates/index.html
-        wget -P templates ${FOLDER}/templates/result.html
-        wget -P templates ${FOLDER}/static/applogo.png
-        wget ${FOLDER}/app.py
-        python3 app.py
+        
 
   # Security Group for the EC2 instance
   SecurityGroup:
