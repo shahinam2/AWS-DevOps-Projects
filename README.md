@@ -4,5 +4,5 @@ This repository contains a list of projects that I have worked on using AWS serv
 The projects are listed in reverse chronological order.
 
 ### AWS & DevOps Projects From Newest to Oldest
-2. Roman Numerals Converter Application
-1. Random Carousel Static Website
+- Roman Numerals Converter Application
+- Random Carousel Static Website
