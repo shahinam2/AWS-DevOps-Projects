@@ -1,4 +1,4 @@
-# Project 101: Random Image Carousel Static Website
+# Project 1: Random Image Carousel Static Website
 
 This project demonstrates how to deploy a static website on an AWS EC2 instance using AWS CloudFormation. The website features a carousel of kitten images and is hosted on an Apache web server.
 
@@ -12,7 +12,7 @@ This CloudFormation template launches a t2.micro EC2 instance running Amazon Lin
 - Downloads the HTML from GitHub into /var/www/html.
 - Opens ports 22 (SSH) and 80 (HTTP) via a security group.
 - Outputs the public URL of the instance.
->🔐 Note: SSH and HTTP access are open to the world (0.0.0.0/0). Restrict in production.
+>🔐 Note: SSH access is open to the world (0.0.0.0/0). Restrict in production.
 
 How it looks:  
 <img src="./readme-files/screenshot.png" width="500" height="auto" />
