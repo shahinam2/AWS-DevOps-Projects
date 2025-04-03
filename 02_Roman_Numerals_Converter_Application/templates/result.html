@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clarusway Project - 001</title>
+    <style>
+        body {
+            width: 600px;
+            margin: auto;
+            background-color: #DFDFDB;
+        }
+
+        div {
+            margin-top: 100px;
+            margin-bottom: 50px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .number {
+            color: rgb(0, 102, 255);
+            font-size: x-large;
+        }
+
+        .result {
+            color: rgb(255, 94, 0);
+            font-size: x-large;
+        }
+
+        .footnote {
+            color: rgba(0, 0, 255, 0.712);
+        }
+    </style>
+</head>
+
+<body>
+    <div><img width="300px", height="300px" src="{{ url_for('static', filename='applogo.png') }}" /></div>
+    <h2>Project : Roman Numerals Converter Application</h2>
+    <br>
+    <h3><b>Result:</b></h3>
+    <p>Number 
+        <span class="number"> <b>{{ number }}</b></span> 
+        equals to 
+        <span class="result"><b>{{ result }}</b></span> 
+        in Roman Numerals
+    </p>
+    <br>
+    <p>Go back to <a href="{{ url_for('index') }}">Home Page</a></p> 
+    <br>
+    <p class="footnote">
+        <i>This app is developed in Python by 
+            <b>Shahin Hemmati</b>
+             and deployed with Flask on AWS EC2 Instance using AWS Clouldformation Service.
+        </i>
+    </p>
+</body>
+
+</html>

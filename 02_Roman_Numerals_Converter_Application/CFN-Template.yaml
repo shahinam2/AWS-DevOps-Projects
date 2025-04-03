@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  LatestAmiId:
+    Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+
+  KeyPairParameter:
+    Description: Select your keypair.
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: "shahin-key"
+
+  InstanceTypeParameter:
+    Description: Select your instance type.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.nano
+      - t2.small
+
+Resources:
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref KeyPairParameter
+      SecurityGroups: 
+        - !Ref SecurityGroup
+      Tags: 
+        - Key: Name
+          Value: !Sub "Web Server of ${AWS::StackName}"
+      UserData: !Base64 |
+        #!/bin/bash
+        yum update -y
+        yum install python3 python3-pip -y
+        pip3 install flask
+        cd /home/ec2-user
+        FOLDER="https://raw.githubusercontent.com/ilhanigit/02_Roman_Numerals_Converter_Application"
+        wget -P templates ${FOLDER}/templates/index.html
+        wget -P templates ${FOLDER}/templates/result.html
+        wget -P templates ${FOLDER}/static/applogo.png
+        wget ${FOLDER}/app.py
+        python3 app.py
+
+  # Security Group for the EC2 instance
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      # VpcId: !Ref Your-Custom-VPC  # Replace with your VPC ID reference if needed
+                                     # If you do not specify a VPC, the default is to use the default VPC for the Region.
+      SecurityGroupIngress:
+        # Allow SSH access
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+        # Allow HTTP access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+
+Outputs:
+  WebsiteURL:
+    Description: "URL of the Random Carousel Application"
+    Value: !Sub "http://${Instance.PublicDnsName}"
