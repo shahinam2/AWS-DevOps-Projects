@@ -33,7 +33,10 @@ Resources:
         - Key: Name
           Value: !Sub "Web Server of ${AWS::StackName}"
       UserData: !Base64 |
-        
+        #!/bin/bash
+        curl -o /tmp/setup.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/02_Roman_Numerals_Converter_Application/setup.sh
+        chmod +x /tmp/setup.sh
+        bash /tmp/setup.sh
 
   # Security Group for the EC2 instance
   SecurityGroup:
