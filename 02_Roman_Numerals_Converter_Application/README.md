@@ -92,4 +92,26 @@ Explanation of the files:
    aws cloudformation delete-stack --stack-name my-stack --region <your-region>
    ```
 
+### About setup-with-pip.sh vs. setup-with-uv.sh
+Both scripts serve the same purpose: setting up the Python environment and installing the required dependencies. The key difference lies in how the dependencies are installed:
+setup-with-pip.sh uses the traditional pip installer.
+setup-with-uv.sh uses uv, a modern Rust-based alternative that is significantly faster.
+The reason both are included is to highlight the performance difference between pip and uv.
+Here’s a simple benchmark comparison:
+```sh
+# Using uv
+time uv add flask gunicorn
+# Output:
+real    0m0.098s
+user    0m0.060s
+sys     0m0.030s  
 
+# Using pip
+time pip install flask gunicorn
+# Output:
+real    0m2.190s
+user    0m1.770s
+sys     0m0.118s
+```
+As you can see, uv installs packages nearly 20× faster in this case.
+⚠️ Note: The actual speedup may vary based on network, system load, and caching.
