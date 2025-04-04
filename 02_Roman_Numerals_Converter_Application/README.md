@@ -89,6 +89,9 @@ Explanation of the files:
    aws cloudformation delete-stack --stack-name my-stack --region <your-region>
    ```
 
+### A note about app.py debugging
+The debug is set to `True` for testing purposes. In production, it should be set to `False` to avoid exposing sensitive information in case of errors.
+
 ### About setup-with-pip.sh vs. setup-with-uv.sh
 Both scripts serve the same purpose: setting up the Python environment and installing the required dependencies. The key difference lies in how the dependencies are installed:
 setup-with-pip.sh uses the traditional pip installer.

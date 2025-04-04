@@ -1,6 +1,6 @@
 #!/bin/bash
 yum update -y
-yum install python3 python3-pip nginx wget -y
+yum install python3-pip nginx -y
 
 # Set up app directory
 mkdir -p /home/ec2-user/roman-numerals-converter/templates
