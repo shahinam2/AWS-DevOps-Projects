@@ -2,10 +2,6 @@
 yum update -y
 yum install python3 python3-pip nginx wget -y
 
-# Start and enable Nginx
-systemctl start nginx
-systemctl enable nginx
-
 # Set up app directory
 mkdir -p /home/ec2-user/roman-numerals-converter/templates
 mkdir -p /home/ec2-user/roman-numerals-converter/static
@@ -63,5 +59,6 @@ server {
 }
 EOF
 
-# Restart Nginx to apply the config
-systemctl restart nginx
+# Start and enable Nginx
+systemctl start nginx
+systemctl enable nginx
