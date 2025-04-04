@@ -113,5 +113,5 @@ real    0m2.190s
 user    0m1.770s
 sys     0m0.118s
 ```
-As you can see, uv installs packages nearly 20× faster in this case.
+As you can see, uv installs packages nearly 20× faster in this case.  
 ⚠️ Note: The actual speedup may vary based on network, system load, and caching.
