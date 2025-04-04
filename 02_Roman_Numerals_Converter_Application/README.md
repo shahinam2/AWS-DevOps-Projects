@@ -5,11 +5,8 @@ This project showcases how to automate the deployment of a Flask-based Roman Num
 **Project Diagram:**  
 <img src="./readme-files/RomanNumeralsConverterDiagram.gif" width="500" height="auto" />
 
-**How it looks:**  
-Main page of the application:  
-<img src="./readme-files/AppMainPage.png" width="300" height="auto" />  
-Result page of the application:  
-<img src="./readme-files/AppResultPage.png" width="300" height="auto" />
+**App Demo:**  
+<img src="./readme-files/AppDemo.gif" width="500" height="auto" />
 
 ### What it does:
 - Creates an EC2 instance with:  
