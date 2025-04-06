@@ -37,7 +37,8 @@ This project showcases how to automate the deployment of a Flask-based Roman Num
 ├── CFN-Template.yaml
 ├── readme-files
 ├── README.md
-├── setup.sh
+├── setup-with-pip.sh
+├── setup-with-uv.sh
 ├── static
 │   └── applogo.png
 └── templates
@@ -48,7 +49,8 @@ Explanation of the files:
 - `app.py`: Python script for the Flask application.
 - `CFN-Template.yaml`: CloudFormation template for deploying the resources.
 - `readme-files/`: Directory containing screenshots and other readme files.
-- `setup.sh`: Shell script to set up the Flask application and Nginx server as reverse proxy.
+- `setup-with-pip.sh`: Shell script to set up the Flask application with pip and Nginx server as reverse proxy..
+- `setup-with-uv.sh`: Shell script to set up the Flask application with uv and Nginx server as reverse proxy.
 - `static/`: Directory containing static files (e.g., images).
 - `templates/`: Jinja2 HTML templates – Used by Flask to render the frontend. index.html is the main input form, and result.html displays the conversion result.
 
