@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Email</title>
+</head>
+<body>
+    <div><img style="width:200px; height:50px" src="https://clarusway.com/wp-content/uploads/2022/12/clarusway-logo-black.png" /></div>
+    <h1>Add Email to the Database</h1>
+    <form action="#" method="post">
+        <p>
+
+            <label for="name">User Name : </label>
+            <input type="text" name="username" id="name">
+        </p>
+        <p>
+
+            <label for="email">User Email : </label>
+            <input type="text" name="useremail" id="email">
+        </p>
+        <p><input type="submit" value="Save"></p>
+    </form>
+    {% if show_result %}
+        <h1>Result </strong> </h1>
+        <h3>{{ result_html }}</h3>
+    {% endif %}
+</body>
+</html>
