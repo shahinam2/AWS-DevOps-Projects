@@ -1,0 +1,242 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: 'AWS CloudFormation Sample Template RDS_MySQL_With_Read_Replica: Sample template showing how to create a highly-available, RDS DBInstance with a read replica. **WARNING** This template creates an Amazon Relational Database Service database instance and Amazon CloudWatch alarms. You will be billed for the AWS resources used if you create a stack from this template.'
+
+Parameters:
+  DBName:
+    Description: The database name
+    Type: String
+    Default: EmailDB
+    MinLength: "1"
+    MaxLength: "64"
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+
+  DBUser:
+    Description: The database admin account username
+    Type: String
+    Default: admin
+    NoEcho: "true"
+    MinLength: "1"
+    MaxLength: "16"
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    ConstraintDescription: must begin with a letter and contain only alphanumeric characters.
+
+  DBAllocatedStorage:
+    Description: The size of the database (Gb)
+    Type: Number
+    Default: "20"
+    MinValue: "5"
+    MaxValue: "1024"
+    ConstraintDescription: must be between 5 and 1024Gb.
+
+  DBInstanceClass:
+    Description: The database instance type
+    Type: String
+    Default: db.t3.micro
+    ConstraintDescription: must select a valid database instance type.
+
+  EC2SecurityGroup:
+    Description: The EC2 security group that contains instances that need access to the database
+    Type: String
+    Default: Shahin-MySQL-SSH
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    ConstraintDescription: must be a valid security group name.
+
+  LatestAmiId:
+    Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+
+  KeyPairParameter:
+    Description: Select your keypair.
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: "shahin-key"
+
+  InstanceTypeParameter:
+    Description: Select your instance type.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.nano
+      - t2.small
+
+  # MultiAZ:
+  #   Description: Multi-AZ master database
+  #   Type: String
+  #   AllowedValues:
+  #     - "true"
+  #     - "false"
+  #   Default: "false"
+  #   ConstraintDescription: must be true or false.
+
+  # EnableReadReplica:
+  #   Description: Enable the ReadReplica
+  #   Type: String
+  #   AllowedValues:
+  #     - "true"
+  #     - "false"
+  #   Default: "true"
+  #   ConstraintDescription: must be true or false.
+
+# Conditions:
+#   IsEC2VPC: !Or
+#     - !Equals
+#       - !Ref AWS::Region
+#       - eu-central-1
+#     - !Equals
+#       - !Ref AWS::Region
+#       - cn-north-1
+
+#   EnableReadReplica: !Equals
+#     - !Ref EnableReadReplica
+#     - "true"
+
+Resources:
+# APP Recources
+  MyInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: MyInstancePolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:DescribeDBInstances
+                  - secretsmanager:GetSecretValue
+                Resource: "*"
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref MyInstanceRole
+
+  Instance:
+    Type: AWS::EC2::Instance
+    DependsOn: MainDB
+    Properties: 
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceTypeParameter
+      KeyName: !Ref KeyPairParameter
+      SecurityGroups: 
+        - !Ref EC2SecurityGroup
+      Tags: 
+        - Key: Name
+          Value: !Sub "Web Server of ${AWS::StackName}"
+      UserData: !Base64 |
+        #!/bin/bash
+        # Export database endpoint and name as environment variables
+        DB_ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier MainDB --query 'DBInstances[0].Endpoint.Address' --output text)
+        DB_NAME="EmailDB"
+        echo "export DB_ENDPOINT=${DB_ENDPOINT}" >> /etc/environment
+        echo "export DB_NAME=${DB_NAME}" >> /etc/environment
+        source /etc/environment
+        curl -o /tmp/setup-with-pip.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database/setup-with-pip.sh
+        chmod +x /tmp/setup-with-pip.sh
+        bash /tmp/setup-with-pip.sh
+      IamInstanceProfile: !Ref InstanceProfile
+
+# DB Resources
+  DBEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Open database for access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: "3306"
+          ToPort: "3306"
+          SourceSecurityGroupName: !Ref EC2SecurityGroup
+    # Condition: IsEC2VPC
+
+  DBCredential:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      GenerateSecretString:
+        PasswordLength: 16
+        ExcludeCharacters: '"@/\'
+        RequireEachIncludedType: true
+
+  MainDB:
+    Type: AWS::RDS::DBInstance
+    DependsOn: DBCredential
+    Properties:
+      DBName: !Ref DBName
+      AllocatedStorage: !Ref DBAllocatedStorage
+      DBInstanceClass: !Ref DBInstanceClass
+      Engine: MySQL
+      MasterUsername: !Ref DBUser
+      MasterUserPassword: !Sub '{{resolve:secretsmanager:${DBCredential}}}'
+      PubliclyAccessible: true  # Set to false for production
+      StorageEncrypted: true
+      Tags:
+        - Key: Name
+          Value: Master Database
+    # DeletionPolicy: Snapshot
+    # UpdateReplacePolicy: Snapshot
+      # BackupRetentionPeriod: 7
+      # MultiAZ: !Ref MultiAZ
+      # VPCSecurityGroups: !If
+      #   - IsEC2VPC
+      #   - - !GetAtt DBEC2SecurityGroup.GroupId
+      #   - !Ref AWS::NoValue
+
+  # ReplicaDB:
+  #   DeletionPolicy: Retain
+  #   UpdateReplacePolicy: Retain
+  #   Type: AWS::RDS::DBInstance
+  #   Metadata:
+  #     cfn-lint:
+  #       config:
+  #         ignore_checks:
+  #           - I3013
+  #   Properties:
+  #     SourceDBInstanceIdentifier: !Ref MainDB
+  #     PubliclyAccessible: false
+  #     DBInstanceClass: !Ref DBInstanceClass
+  #     Tags:
+  #       - Key: Name
+  #         Value: Read Replica Database
+  #   Condition: EnableReadReplica
+
+Outputs:
+  DBCredentialSecretNameArn:
+    Description: Name of the secret containing the database credential
+    Value: !Ref DBCredential
+
+  JDBCConnectionString:
+    Description: JDBC connection string for the master database
+    Value: !Sub "${MainDB.Endpoint.Address}/${DBName}"
+
+  WebsiteURL:
+    Description: "URL of the Email Database App"
+    Value: !Sub "http://${Instance.PublicDnsName}"
+
+  # EC2Platform:
+  #   Description: Platform in which this stack is deployed
+  #   Value: !If
+  #     - IsEC2VPC
+  #     - "true"
+  #     - EC2VPC
+
+  # ReplicaJDBCConnectionString:
+  #   Description: JDBC connection string for the replica database
+  #   Value: !Join
+  #     - ""
+  #     - - jdbc:mysql://
+  #       - !GetAtt ReplicaDB.Endpoint.Address
+  #       - ':'
+  #       - !GetAtt ReplicaDB.Endpoint.Port
+  #       - /
+  #       - !Ref DBName
+  #   Condition: EnableReadReplica

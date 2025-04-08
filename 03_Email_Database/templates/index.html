@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Email Database</title>
+</head>
+<body>
+    <!-- Email Database Text -->
+    <h1>Email Database</h1>
+
+    <!-- App Logo -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='applogo.png') }}" alt="App Logo" class="app-logo">
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <!-- Search Box -->
+        <div class="search-box">
+            <form method="POST" class="form">
+                <label for="user_keyword">Find Email by Username:</label>
+                <input type="text" id="user_keyword" name="user_keyword" placeholder="Enter username">
+                <button type="submit">Find Email</button>
+            </form>
+            {% if name_emails and name_emails != "User not found" %}
+                <h2>Search Results:</h2>
+                <ul>
+                    {% for username, email in name_emails %}
+                        <li><b>Username:</b> {{ username }}</li>
+                        <li><b>Email:</b> {{ email }}</li>
+                    {% endfor %}
+                </ul>
+            {% elif name_emails == "User not found" %}
+                <p>{{ name_emails }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Feedback Message -->
+
+
+        <!-- Add Box -->
+        <div class="add-box">
+            <form method="POST" class="form">
+                <label for="username">Add Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter Username">
+                <label for="useremail">Add Email:</label>
+                <input type="email" id="useremail" name="useremail" placeholder="Enter email">
+                <button type="submit">Add Email</button>
+                {% if feedback %}
+                <div class="feedback">
+                    <p>{{ feedback }}</p>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</body>
+</html>
