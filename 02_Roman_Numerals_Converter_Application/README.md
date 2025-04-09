@@ -31,7 +31,7 @@ This project showcases how to automate the deployment of a Flask-based Roman Num
 
 >🔐 Note: SSH access is open to the world (0.0.0.0/0). Restrict in production.
 
-## Project Structure
+### Project Structure
 ```
 ├── app.py
 ├── CFN-Template.yaml
@@ -54,13 +54,13 @@ Explanation of the files:
 - `static/`: Directory containing static files (e.g., images).
 - `templates/`: Jinja2 HTML templates – Used by Flask to render the frontend. index.html is the main input form, and result.html displays the conversion result.
 
-## Prerequisites
+### Prerequisites
 - AWS CLI installed and configured with appropriate permissions.
 - An existing key pair in the AWS region where the stack will be deployed. make sure to replace the `shahin-key` parameter in the CloudFormation template with the name of your key pair.
-- Make to change the region in the AWS CLI commands to the region where you want to deploy the stack.
+- Make sure to change the region in the AWS CLI commands to the region where you want to deploy the stack.
 - SSM parameter `/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64` available for the latest Amazon Linux 2 AMI.
 
-## Deployment Steps
+### Deployment Steps
 1. **Create the CloudFormation Stack**
    Use the following command to create the stack:
    ```sh

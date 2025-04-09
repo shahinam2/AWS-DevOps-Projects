@@ -71,7 +71,7 @@ The CloudFormation template is divided into several sections:
 - Make sure to change the region in the AWS CLI commands to the region where you want to deploy the stack.
 - SSM parameter /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 available for the latest Amazon Linux 2 AMI.
 
-## Deployment Steps
+### Deployment Steps
 1. **Create the CloudFormation Stack**
    Use the following command to create the stack:
    ```sh
