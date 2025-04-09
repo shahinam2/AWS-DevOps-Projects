@@ -135,17 +135,24 @@ Resources:
         - Key: Name
           Value: !Sub "Web Server of ${AWS::StackName}"
       UserData: 
-        Fn::Base64: !Sub |
+        Fn::Base64: !Sub 
+        - |
           #!/bin/bash
           # Export database endpoint and name as environment variables
-          echo "export DB_ENDPOINT=${MainDB.Endpoint.Address}" >> /home/ec2-user/Email_Database/.env
-          echo "export DB_NAME=${DBName}" >> /home/ec2-user/Email_Database/.env
-          echo "export AWS_REGION=${AWS::Region}" >> /home/ec2-user/Email_Database/.env
-          echo "export SECRET_ARN=${DBCredential}" >> /home/ec2-user/Email_Database/.env
+          echo "DB_ENDPOINT=${MainDB.Endpoint.Address}" > /home/ec2-user/Email_Database/.env
+          echo "DB_NAME=${DBName}" >> /home/ec2-user/Email_Database/.env
+          echo "AWS_REGION=${AWS::Region}" >> /home/ec2-user/Email_Database/.env
+          echo "SECRET_ARN=${DBCredential}" >> /home/ec2-user/Email_Database/.env
 
           curl -o /tmp/setup-with-pip.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database/setup-with-pip.sh
           chmod +x /tmp/setup-with-pip.sh
           bash /tmp/setup-with-pip.sh
+        - {
+          DB_ENDPOINT: !GetAtt MainDB.Endpoint.Address,
+          DB_NAME: !Ref DBName,
+          AWS_REGION: !Ref AWS::Region,
+          SECRET_ARN: !Ref DBCredential
+        } 
       IamInstanceProfile: !Ref InstanceProfile
 
 # DB Resources
