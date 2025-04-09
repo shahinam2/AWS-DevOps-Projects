@@ -1,8 +1,4 @@
 #!/bin/bash
-# Export the Secret ARN as an environment variable
-echo "export DB_SECRET_ARN='{{resolve:secretsmanager:${DBCredential}}}'" >> /etc/environment
-source /etc/environment
-
 # Install necessary packages
 yum update -y
 yum install python3-pip nginx -y
@@ -17,7 +13,7 @@ python3 -m venv venv
 source venv/bin/activate
 FOLDER="https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database"
 wget -P templates ${FOLDER}/templates/index.html
-wget -P templates ${FOLDER}/static/style.css
+wget -P static ${FOLDER}/static/style.css
 wget -P static ${FOLDER}/static/applogo.png
 wget ${FOLDER}/requirements.txt
 wget ${FOLDER}/app.py
@@ -37,6 +33,7 @@ User=ec2-user
 Group=ec2-user
 WorkingDirectory=/home/ec2-user/Email_Database
 ExecStart=/home/ec2-user/Email_Database/venv/bin/gunicorn -b 127.0.0.1:8000 app:app
+EnvironmentFile=/home/ec2-user/Email_Database/.env
 Restart=always
 
 [Install]

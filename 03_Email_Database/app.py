@@ -8,15 +8,15 @@ from sqlalchemy import text
 # Load environment variables
 DB_ENDPOINT = os.getenv('DB_ENDPOINT', 'localhost')
 DB_NAME = os.getenv('DB_NAME', 'default_db')
-AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
+AWS_REGION = os.getenv('AWS_REGION', 'eu-central-1')
 SECRET_ARN = os.getenv('SECRET_ARN', 'default_secret_arn')
 
 # Fetch the secret value from AWS Secrets Manager
 def get_secret(secret_arn):
     try:
-        client = boto3.client('secretsmanager',region_name=AWS_REGION)
+        client = boto3.client('secretsmanager', region_name=AWS_REGION)
         response = client.get_secret_value(SecretId=secret_arn)
-        return response['SecretString']
+        return response['SecretString']  # Return the plain string directly
     except ClientError as e:
         print(f"Error retrieving secret: {e}")
         return None
