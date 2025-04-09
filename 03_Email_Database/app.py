@@ -6,22 +6,29 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
 # Load environment variables
-DB_SECRET_ARN = os.getenv('DB_SECRET_ARN', 'default_secret_arn')
 DB_ENDPOINT = os.getenv('DB_ENDPOINT', 'localhost')
 DB_NAME = os.getenv('DB_NAME', 'default_db')
+AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
+SECRET_ARN = os.getenv('DB_SECRET_ARN', 'default_secret_arn')
 
 # Fetch the secret value from AWS Secrets Manager
 def get_secret(secret_arn):
     try:
-        client = boto3.client('secretsmanager')
+        client = boto3.client(
+            service_name='secretsmanager',
+            region_name=AWS_REGION
+        )
         response = client.get_secret_value(SecretId=secret_arn)
         return response['SecretString']
     except ClientError as e:
         print(f"Error retrieving secret: {e}")
         return None
 
-secret_value = get_secret(DB_SECRET_ARN)
-print("Fetched secret:", secret_value)
+# Fetch credentials from Secrets Manager
+secret_value = get_secret(SECRET_ARN)
+if not secret_value:
+    print("Failed to retrieve credentials from Secrets Manager.")
+    exit(1)
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./email.db'

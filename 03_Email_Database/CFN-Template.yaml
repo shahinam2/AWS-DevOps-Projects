@@ -134,17 +134,19 @@ Resources:
       Tags: 
         - Key: Name
           Value: !Sub "Web Server of ${AWS::StackName}"
-      UserData: !Base64 |
-        #!/bin/bash
-        # Export database endpoint and name as environment variables
-        DB_ENDPOINT=$(aws rds describe-db-instances --db-instance-identifier MainDB --query 'DBInstances[0].Endpoint.Address' --output text)
-        DB_NAME="EmailDB"
-        echo "export DB_ENDPOINT=${DB_ENDPOINT}" >> /etc/environment
-        echo "export DB_NAME=${DB_NAME}" >> /etc/environment
-        source /etc/environment
-        curl -o /tmp/setup-with-pip.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database/setup-with-pip.sh
-        chmod +x /tmp/setup-with-pip.sh
-        bash /tmp/setup-with-pip.sh
+      UserData: 
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          # Export database endpoint and name as environment variables
+          echo "export DB_ENDPOINT=${MainDB.Endpoint.Address}" >> /etc/environment
+          echo "export DB_NAME=${DBName}" >> /etc/environment
+          echo "export AWS_REGION=${AWS::Region}" >> /etc/environment
+          echo "export SECRET_ARN=${DBCredential}" >> /etc/environment
+          source /etc/environment
+
+          curl -o /tmp/setup-with-pip.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database/setup-with-pip.sh
+          chmod +x /tmp/setup-with-pip.sh
+          bash /tmp/setup-with-pip.sh
       IamInstanceProfile: !Ref InstanceProfile
 
 # DB Resources

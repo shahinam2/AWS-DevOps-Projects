@@ -20,6 +20,7 @@ FOLDER="https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/hea
 wget -P templates ${FOLDER}/templates/index.html
 wget -P templates ${FOLDER}/static/style.css
 wget -P static ${FOLDER}/static/applogo.png
+wget ${FOLDER}/requirements.txt
 wget ${FOLDER}/app.py
 
 # Fix permissions
@@ -28,7 +29,7 @@ chown -R ec2-user:ec2-user /home/ec2-user/Email_Database
 # Create systemd unit for Gunicorn
 cat <<EOF > /etc/systemd/system/Email_Database.service
 [Unit]
-Description=Gunicorn instance for Roman Numerals app
+Description=Gunicorn instance for Email Database app
 After=network.target
 
 [Service]
@@ -49,7 +50,7 @@ systemctl enable Email_Database
 systemctl start Email_Database
 
 # Configure Nginx reverse proxy
-cat <<EOF > /etc/nginx/conf.d/roman-numerals.conf
+cat <<EOF > /etc/nginx/conf.d/Email_Database.conf
 server {
     listen 80;
     server_name _;
