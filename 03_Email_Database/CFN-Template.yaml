@@ -190,6 +190,7 @@ Resources:
       Tags:
         - Key: Name
           Value: Master Database
+      BackupRetentionPeriod: 0  # For testing purposes, set to 0
     # DeletionPolicy: Snapshot
     # UpdateReplacePolicy: Snapshot
       # BackupRetentionPeriod: 7
