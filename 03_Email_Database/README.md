@@ -62,7 +62,7 @@ The CloudFormation template is divided into several sections:
     - An RDS instance that serves as the database for the application.
     - A DB-EC2-Security group that allows inbound traffic on port 3306 from the EC2 instance.
     - DB Password is stored in AWS Secret Manager.
-  - Outputs: This section defines the outputs of the stack, including the URL of the website and DB Endpoint.
+- **Outputs**: This section defines the outputs of the stack, including the URL of the website and DB Endpoint.
 
 ### Prerequisites
 - AWS CLI installed and configured with appropriate permissions.
