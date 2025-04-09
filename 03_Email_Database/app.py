@@ -9,15 +9,12 @@ from sqlalchemy import text
 DB_ENDPOINT = os.getenv('DB_ENDPOINT', 'localhost')
 DB_NAME = os.getenv('DB_NAME', 'default_db')
 AWS_REGION = os.getenv('AWS_REGION', 'us-east-1')
-SECRET_ARN = os.getenv('DB_SECRET_ARN', 'default_secret_arn')
+SECRET_ARN = os.getenv('SECRET_ARN', 'default_secret_arn')
 
 # Fetch the secret value from AWS Secrets Manager
 def get_secret(secret_arn):
     try:
-        client = boto3.client(
-            service_name='secretsmanager',
-            region_name=AWS_REGION
-        )
+        client = boto3.client('secretsmanager',region_name=AWS_REGION)
         response = client.get_secret_value(SecretId=secret_arn)
         return response['SecretString']
     except ClientError as e:
@@ -119,4 +116,4 @@ def index():
 
 # - Add a statement to run the Flask application which can be reached from any host on port 80.
 if __name__=='__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(debug=True)

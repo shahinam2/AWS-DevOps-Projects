@@ -15,13 +15,13 @@ cd /home/ec2-user/Email_Database
 # Download app files
 python3 -m venv venv
 source venv/bin/activate
-pip3 install -r requirements.txt
 FOLDER="https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/03_Email_Database"
 wget -P templates ${FOLDER}/templates/index.html
 wget -P templates ${FOLDER}/static/style.css
 wget -P static ${FOLDER}/static/applogo.png
 wget ${FOLDER}/requirements.txt
 wget ${FOLDER}/app.py
+pip3 install -r requirements.txt
 
 # Fix permissions
 chown -R ec2-user:ec2-user /home/ec2-user/Email_Database
