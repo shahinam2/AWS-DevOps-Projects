@@ -39,7 +39,7 @@ Parameters:
   EC2SecurityGroup:
     Description: The EC2 security group that contains instances that need access to the database
     Type: String
-    Default: Flask-APP # allow ports 80 and 22
+    Default: SecurityGroup # allow ports 80 and 22
     AllowedPattern: '[a-zA-Z0-9\-]+'
     ConstraintDescription: must be a valid security group name.
 
@@ -90,6 +90,22 @@ Resources:
     Properties:
       Roles:
         - !Ref MyInstanceRole
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        # Allow SSH access
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+        # Allow HTTP access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
 
   Instance:
     Type: AWS::EC2::Instance
