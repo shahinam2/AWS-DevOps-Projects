@@ -36,13 +36,6 @@ Parameters:
     Default: db.t3.micro
     ConstraintDescription: must select a valid database instance type.
 
-  EC2SecurityGroup:
-    Description: The EC2 security group that contains instances that need access to the database
-    Type: String
-    Default: SecurityGroup # allow ports 80 and 22
-    AllowedPattern: '[a-zA-Z0-9\-]+'
-    ConstraintDescription: must be a valid security group name.
-
   LatestAmiId:
     Description: "SSM parameter for the latest Amazon Linux 2 AMI ID"
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
@@ -63,7 +56,35 @@ Parameters:
       - t2.small
 
 Resources:
-# APP Recources
+  # Security group for EC2 instance
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance
+      SecurityGroupIngress:
+        # Allow SSH access
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+        # Allow HTTP access
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
+
+  # Security group for RDS database
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for RDS database
+      SecurityGroupIngress:
+        # Allow MySQL access from the EC2 instance security group
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !GetAtt InstanceSecurityGroup.GroupId
+
   MyInstanceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -91,31 +112,14 @@ Resources:
       Roles:
         - !Ref MyInstanceRole
 
-  SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Enable SSH and HTTP access
-      SecurityGroupIngress:
-        # Allow SSH access
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
-        # Allow HTTP access
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: 0.0.0.0/0  # Replace with a more restrictive CIDR if needed
-
   Instance:
     Type: AWS::EC2::Instance
-    DependsOn: MainDB
     Properties: 
       ImageId: !Ref LatestAmiId
       InstanceType: !Ref InstanceTypeParameter
       KeyName: !Ref KeyPairParameter
-      SecurityGroups: 
-        - !Ref EC2SecurityGroup
+      SecurityGroupIds: 
+        - !GetAtt InstanceSecurityGroup.GroupId
       Tags: 
         - Key: Name
           Value: !Sub "Web Server of ${AWS::StackName}"
@@ -145,17 +149,6 @@ Resources:
         } 
       IamInstanceProfile: !Ref InstanceProfile
 
-# DB Resources
-  DBEC2SecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: Open database for access
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: "3306"
-          ToPort: "3306"
-          SourceSecurityGroupName: !Ref EC2SecurityGroup
-
   DBCredential:
     Type: AWS::SecretsManager::Secret
     Properties:
@@ -166,7 +159,6 @@ Resources:
 
   MainDB:
     Type: AWS::RDS::DBInstance
-    DependsOn: DBCredential
     Properties:
       DBName: !Ref DBName
       AllocatedStorage: !Ref DBAllocatedStorage
@@ -176,6 +168,8 @@ Resources:
       MasterUserPassword: !Sub '{{resolve:secretsmanager:${DBCredential}}}'
       PubliclyAccessible: false
       StorageEncrypted: true
+      VPCSecurityGroups:
+        - !GetAtt DatabaseSecurityGroup.GroupId
       Tags:
         - Key: Name
           Value: Master Database
