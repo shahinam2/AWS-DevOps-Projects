@@ -104,3 +104,11 @@ Then update the Route53 records to correctly point to your CloudFront and ALB.
 <img src="readme-files/r53-alb.png" alt="ALB Config" width="600"/>  
 
 Congratulations! You have successfully deployed the recipe sharing application using AWS CloudFormation. You can now access the application using the domain name you registered and configured in Route 53.
+
+---
+### Notes
+- This project is a demonstration of how to deploy a recipe sharing application using AWS services. It is not intended for production use and should be used for educational purposes only. The code and resources provided in this project are provided "as is" without warranty of any kind, either express or implied. **Use it at your own risk**.
+- To make the process of updating the app its better to implement a **CI/CD pipeline**.
+- For better **observability and monitoring**, you can integrate AWS CloudWatch or any preferred solution to monitor the application and set up alarms for any issues that may arise.
+- For better security, you can implement **AWS WAF** (Web Application Firewall) to protect your application from common web exploits and bots.
+- This project is an enhanced version of the **AWS Cloud Projects** book, Chapter 3 by **Ivo Pinto & Pedro Santos**. You can find the book [here](https://www.packtpub.com/en-us/product/aws-cloud-projects-9781835889282).
