@@ -1,0 +1,15 @@
+[
+    {
+      "ParameterKey": "ALBCertificateArn",
+      "ParameterValue": "<Your-ALB-Certificate-ARN-Here>"
+    },
+    {
+      "ParameterKey": "CloudfrontCertificateArn",
+      "ParameterValue": "<Your-CloudFront-Certificate-ARN-Here>"
+    },
+    {
+      "ParameterKey": "CloudfrontDomainName",
+      "ParameterValue": "<Your-CloudFront-Domain-Name-Here>"
+    }
+  ]
+  
