@@ -17,7 +17,6 @@ The goal of this project is to deploy a recipe sharing application made by fasta
 | Backend   | - 1 VPC<br>- 2 public subnets<br>- 2 private subnets<br>- 1 NAT gateway<br>- 1 ALB<br>- 1 Auto Scaling group |
 | Database  | - DynamoDB                                                                                                   |
 
-
 ### Pre-requisites:
 - You must have a domain name registered with a domain registrar. This can be done through AWS Route 53 or any other registrar but AWS Route 53 is recommended for easier setup.
 - You must have a hosted zone created in AWS Route 53 for your domain. This is necessary for managing DNS records and validating the certificate.
@@ -30,8 +29,11 @@ Refer to this video for a step-by-step guide on how to request a certificate in 
 How your domain should look like in ACM:
 Certificate for `*.yourdomain.com` and `yourdomain.com` which will be used for CloudFront and ALB.  
 Example of ACM configuration for ALB:  
+
 <img src="readme-files/acm-eu.png" alt="ACM Config" width="600"/>  
+
 Example of ACM configuration for CloudFront:  
+
 <img src="readme-files/acm-us.png" alt="ACM Config" width="600"/>
 
 
@@ -78,7 +80,7 @@ aws cloudformation delete-stack \
   --region <your-region>
 ```  
 
-**Complete the Deployment**
+**Complete the Deployment**  
 Once the S3 bucket is created, you will need to upload the frontend files to the S3 bucket. You can do this using the AWS CLI or the AWS Management Console.
 To build the front end, first edit `frontend/src/configs/configs.tsx` to update the URL of the API like:
 ```
@@ -89,13 +91,15 @@ Then go back to frontend directory and run the following command to build the fr
 npm run build
 ```
 After that, you can upload the contents of the `frontend/dist` directory to the S3 bucket created by the CloudFormation stack. You can do this using the AWS CLI or the AWS Management Console.
+
 To upload the files using the AWS CLI, run the following command:
 ```sh
 aws s3 cp . s3://<Your-Bucket-Name-Here>/ --recursive
 ```
-> Make sure to replace `<Your-Bucket-Name-Here>` with the name of the S3 bucket created by the CloudFormation stack.
+> Make sure to replace `<Your-Bucket-Name-Here>` with the name of the S3 bucket created by the CloudFormation stack.  
 
 Then update the Route53 records to correctly point to your CloudFront and ALB.  
+
 <img src="readme-files/r53-cloudfront.png" alt="CloudFront Config" width="600"/>  
 <img src="readme-files/r53-alb.png" alt="ALB Config" width="600"/>  
 
