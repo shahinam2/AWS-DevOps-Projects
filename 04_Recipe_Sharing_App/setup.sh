@@ -62,3 +62,5 @@ EOF
 systemctl start nginx
 systemctl enable nginx
 systemctl restart nginx
+
+echo "Setup script executed successfully"

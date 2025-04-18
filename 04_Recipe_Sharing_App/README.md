@@ -2,23 +2,21 @@ Project 4: Recipe Sharing App
 =============================
 
 ### Project Goal
-The goal of this project is to create a recipe sharing application using AWS services. The application will allow users to share their favorite recipes and view recipes shared by others. The project will be deployed using AWS CloudFormation, which will automate the deployment process and ensure that all resources are created in a consistent manner.
+The goal of this project is to deploy a recipe sharing application made by fastapi using AWS services. The application will allow users to share their favorite recipes and view recipes shared by others. The project will be deployed using AWS CloudFormation, which will automate the deployment process and ensure that all resources are created in a consistent manner.
+
+### Project Architecture
+<img src="readme-files/recipe-sharing-app-diagram.gif" alt="Architecture Diagram" width="800"/>
+
+### App Demo
+
 
 ### Resources created by the CloudFormation stack:
-**Frontend:**
-- CloudFront
-- S3  
+| Component | Services / Resources                                                                                         |
+|-----------|--------------------------------------------------------------------------------------------------------------|
+| Frontend  | - CloudFront<br>- S3                                                                                         |
+| Backend   | - 1 VPC<br>- 2 public subnets<br>- 2 private subnets<br>- 1 NAT gateway<br>- 1 ALB<br>- 1 Auto Scaling group |
+| Database  | - DynamoDB                                                                                                   |
 
-**Backend:**
-- 1 VPC
-- 2 public subnets
-- 2 private subnets
-- 1 NAT gateway
-- 1 ALB
-- Auto Scaling group
-
-**Database:**
-- DynamoDB
 
 ### Pre-requisites:
 - You must have a domain name registered with a domain registrar. This can be done through AWS Route 53 or any other registrar but AWS Route 53 is recommended for easier setup.
@@ -37,11 +35,13 @@ Example of ACM configuration for CloudFront:
 <img src="readme-files/acm-us.png" alt="ACM Config" width="600"/>
 
 
-### Deployment Steps
+### Deployment
 **Deploy using AWS Console:**  
+
 <img src="readme-files/ConsoleDeploy.png" alt="CloudFormation Stack Details" width="600"/>  
 
 **Deploy using AWS CLI:**  
+
 **Create the Stack**  
 ```sh
 aws cloudformation create-stack \
@@ -76,7 +76,7 @@ To delete the stack, use the following command:
 aws cloudformation delete-stack \ 
   --stack-name my-stack \ 
   --region <your-region>
-```
+```  
 
 **Complete the Deployment**
 Once the S3 bucket is created, you will need to upload the frontend files to the S3 bucket. You can do this using the AWS CLI or the AWS Management Console.

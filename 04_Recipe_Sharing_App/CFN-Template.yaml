@@ -323,6 +323,7 @@ Resources:
         UserData: 
           Fn::Base64:
             #!/bin/bash
+            echo "This is a test" > /tmp/test.txt
             curl -o /tmp/setup.sh https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/04_Recipe_Sharing_App/setup.sh
             chmod +x /tmp/setup.sh
             bash /tmp/setup.sh
