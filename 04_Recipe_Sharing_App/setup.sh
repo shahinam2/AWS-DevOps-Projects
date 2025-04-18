@@ -3,7 +3,7 @@ set -e
 
 # Install necessary packages
 apt update -y
-sudo apt install -y python3 python3-pip python3-virtualenv nginx jq
+apt install -y python3 python3-pip python3-venv nginx jq
 
 # Set up app directory
 mkdir -p /home/ubuntu/RecipeSharingApp
@@ -33,14 +33,14 @@ After=network.target
 User=ubuntu
 Group=ubuntu
 WorkingDirectory=/home/ubuntu/RecipeSharingApp
-ExecStart=/home/ubuntu/RecipeSharingApp/venv/bin/gunicorn -b 127.0.0.1:8000 $SELECTED_REGION main:app
+ExecStart=/home/ubuntu/RecipeSharingApp/venv/bin/python3 -m uvicorn main:app --host 127.0.0.1 --port 8000
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
-# Enable and start Gunicorn
+# Enable and start Uvicorn as a service
 chmod 644 /etc/systemd/system/RecipeSharingApp.service
 systemctl daemon-reload
 systemctl enable RecipeSharingApp

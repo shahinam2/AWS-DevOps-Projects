@@ -6,7 +6,6 @@ from typing import List
 import uuid
 import boto3
 
-
 class Ingredient(BaseModel):
     id: int
     description: str
@@ -22,7 +21,6 @@ class Recipe(BaseModel):
     steps: List[Step]
 
 session = boto3.Session(
-
        region_name='SELECTED_REGION'
    )
 
@@ -32,7 +30,6 @@ table = dynamodb.Table('recipes')
 # Configure CORS
 origins = [
     "*", 
-    
 ]
 
 app = FastAPI(title="Recipe Sharing API")
@@ -46,7 +43,6 @@ app.add_middleware(
 )
 
 #health check
-
 @app.get("/health", status_code=status.HTTP_200_OK)
 async def health_check():
     return {"message": "Service is healthy"}
@@ -66,7 +62,6 @@ async def get_all_recipes():
         return {"message": f"Error retrieving recipes: {e}"}
 
 
-
 #create recipe
 @app.post("/recipes", status_code=status.HTTP_200_OK)
 async def create_recipe(recipe: Recipe):
@@ -83,7 +78,6 @@ async def create_recipe(recipe: Recipe):
         return {"message": f"Error creating recipe: {e}"}
 
 
-
 #delete recipe
 @app.delete("/recipes/{recipe_id}", status_code=status.HTTP_200_OK)
 async def delete_recipe(recipe_id: str):
@@ -96,6 +90,3 @@ async def delete_recipe(recipe_id: str):
         return {"message":response}
     except Exception as e:
         return {"message": f"Error deleting recipe: {e}"}
-
-
-
