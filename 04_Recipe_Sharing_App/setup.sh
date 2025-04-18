@@ -23,10 +23,10 @@ pip3 install -r requirements.txt
 # Fix permissions
 chown -R ubuntu:ubuntu /home/ubuntu/RecipeSharingApp
 
-# Create systemd unit for Gunicorn
+# Create systemd unit for Uvicorn
 cat <<EOF > /etc/systemd/system/RecipeSharingApp.service
 [Unit]
-Description=Gunicorn instance for Recipe Sharing app
+Description=Uvicorn instance for Recipe Sharing app
 After=network.target
 
 [Service]
