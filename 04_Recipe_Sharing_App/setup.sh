@@ -5,10 +5,6 @@ set -e
 apt update -y
 sudo apt install -y python3 python3-pip python3-virtualenv nginx jq
 
-# Get the token and 
-TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-SELECTED_REGION=$(sed -i "s/SELECTED_REGION/$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')/g")
-
 # Set up app directory
 mkdir -p /home/ubuntu/RecipeSharingApp
 cd /home/ubuntu/RecipeSharingApp
@@ -19,6 +15,9 @@ source venv/bin/activate
 FOLDER="https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/04_Recipe_Sharing_App/backend"
 wget ${FOLDER}/requirements.txt
 wget ${FOLDER}/main.py
+# Get the token, find the region and replace in main.py file
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+SELECTED_REGION=$(sed -i "s/SELECTED_REGION/$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')/g")
 pip3 install -r requirements.txt
 
 # Fix permissions
