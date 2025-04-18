@@ -17,7 +17,7 @@ wget ${FOLDER}/requirements.txt
 wget ${FOLDER}/main.py
 # Get the token, find the region and replace in main.py file
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-SELECTED_REGION=$(sed -i "s/SELECTED_REGION/$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')/g")
+sed -i "s/SELECTED_REGION/$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r '.region')/g" main.py
 pip3 install -r requirements.txt
 
 # Fix permissions
