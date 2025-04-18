@@ -341,9 +341,9 @@ Resources:
       LaunchTemplate:
         LaunchTemplateId: !Ref LaunchTemplate
         Version: !GetAtt LaunchTemplate.LatestVersionNumber
-      MinSize: "1"
+      MinSize: "2"
       MaxSize: "4"
-      DesiredCapacity: "2"
+      DesiredCapacity: "3"
       TargetGroupARNs:
         - !Ref ALBTargetGroup
       HealthCheckType: ELB

@@ -5,10 +5,10 @@ Project 4: Recipe Sharing App
 The goal of this project is to deploy a recipe sharing application made by fastapi using AWS services. The application will allow users to share their favorite recipes and view recipes shared by others. The project will be deployed using AWS CloudFormation, which will automate the deployment process and ensure that all resources are created in a consistent manner.
 
 ### Project Architecture
-<img src="readme-files/recipe-sharing-app-diagram.gif" alt="Architecture Diagram" width="800"/>
+<img src="readme-files/recipe-sharing-app-diagram.gif" alt="Architecture-Diagram" width="800"/>
 
 ### App Demo
-
+<img src="readme-files/app-demo.gif" alt="App-Demo" width="800"/>
 
 ### Resources created by the CloudFormation stack:
 | Component | Services / Resources                                                                                         |
