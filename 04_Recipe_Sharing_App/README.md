@@ -11,11 +11,12 @@ The goal of this project is to deploy a recipe sharing application made by fasta
 <img src="readme-files/app-demo.gif" alt="App-Demo" width="800"/>
 
 ### Resources created by the CloudFormation stack:
-| Component | Services / Resources                                                                                         |
-|-----------|--------------------------------------------------------------------------------------------------------------|
-| Frontend  | - CloudFront<br>- S3                                                                                         |
-| Backend   | - 1 VPC<br>- 2 public subnets<br>- 2 private subnets<br>- 1 NAT gateway<br>- 1 ALB<br>- 1 Auto Scaling group |
-| Database  | - DynamoDB                                                                                                   |
+| Component   | Services / Resources                                                                                         |
+|-------------|--------------------------------------------------------------------------------------------------------------|
+| Frontend    | - CloudFront<br>- S3                                                                                         |
+| Backend     | - 1 VPC<br>- 2 public subnets<br>- 2 private subnets<br>- 1 NAT gateway<br>- 1 ALB<br>- 1 Auto Scaling group |
+| Database    | - DynamoDB                                                                                                   |
+| Other Services | - Route 53<br>- CloudWatch<br>- AWS Certificate Manager<br>                                               |
 
 ### Pre-requisites:
 - You must have a domain name registered with a domain registrar. This can be done through AWS Route 53 or any other registrar but AWS Route 53 is recommended for easier setup.
