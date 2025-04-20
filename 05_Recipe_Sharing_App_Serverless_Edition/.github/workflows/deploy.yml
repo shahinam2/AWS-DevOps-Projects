@@ -1,0 +1,51 @@
+name: Deploy Recipe Sharing App Serverless Stack
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+env:
+  AWS_REGION: eu-central-1
+  LAMBDA_BUCKET: my-lambda-code-bucket
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-central-1
+
+      - name: Ensure S3 bucket exists for Lambda codes
+        run: |
+          # Create a random bucket name with prefix
+          LAMBDA_BUCKET_NAME=serverless-recipe-sharing-$(date +%s)
+
+          # Check if the bucket already exists. If it doesn't, create it.
+          aws s3api head-bucket --bucket $LAMBDA_BUCKET_NAME || \
+          aws s3api create-bucket --bucket $LAMBDA_BUCKET_NAME --region $AWS_REGION \
+            --create-bucket-configuration LocationConstraint=$AWS_REGION
+
+      - name: Package Lambda testauth
+        run: |
+          zip -r artifacts/testauth.zip lambdas/testauth/
+
+      - name: Upload Lambda to S3
+        run: |
+          aws s3 cp artifacts/testauth.zip s3://$LAMBDA_BUCKET_NAME/lambdas/testauth.zip
+
+      - name: Deploy CloudFormation
+        run: |
+          aws cloudformation deploy \
+            --template-file CFN-Template-simple.yaml \
+            --stack-name recipe-sharing \
+            --capabilities CAPABILITY_IAM \
+            --parameter-overrides LambdaCodeBucket=$LAMBDA_BUCKET_NAME
