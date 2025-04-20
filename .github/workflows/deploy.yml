@@ -12,6 +12,9 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: eu-central-1
+      LAMBDA_BUCKET_NAME: serverless-recipe-sharing-${{ github.run_id }}
 
     steps:
       - name: Checkout repo
@@ -22,13 +25,10 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-central-1
+          aws-region: $AWS_REGION
 
       - name: Ensure S3 bucket exists for Lambda codes
         run: |
-          # Create a random bucket name with prefix
-          LAMBDA_BUCKET_NAME=serverless-recipe-sharing-$(date +%s)
-
           # Check if the bucket already exists. If it doesn't, create it.
           aws s3api head-bucket --bucket $LAMBDA_BUCKET_NAME || \
           aws s3api create-bucket --bucket $LAMBDA_BUCKET_NAME --region $AWS_REGION \
