@@ -54,6 +54,7 @@ jobs:
             --parameter-overrides LambdaCodeBucket=$LAMBDA_BUCKET_NAME
 
       - name: Clean up
+        if: always()  # This step will run even if the previous steps fail
         run: |
           # Remove the artifacts directory
           rm -rf artifacts
