@@ -39,7 +39,7 @@ jobs:
           # Create a directory for the artifacts
           mkdir -p artifacts/testauth
           cd 05_Recipe_Sharing_App_Serverless_Edition/lambdas/testauth
-          zip -r ../../../../artifacts/testauth.zip .
+          zip -r ../../../artifacts/testauth.zip .
 
       - name: Upload Lambda to S3
         run: |
