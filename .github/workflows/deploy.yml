@@ -36,6 +36,9 @@ jobs:
 
       - name: Package Lambda testauth
         run: |
+          # Create a directory for the artifacts
+          mkdir -p artifacts/testauth
+          # Copy the Lambda function code to the artifacts directory
           zip -r artifacts/testauth.zip 05_Recipe_Sharing_App_Serverless_Edition/lambdas/testauth/
 
       - name: Upload Lambda to S3
