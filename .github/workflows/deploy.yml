@@ -40,7 +40,12 @@ jobs:
           for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
           do
             dir_name=$(basename "$dir")
-            zip -r "artifacts/${dir_name}.zip" "$dir*"
+            # Check if the directory contains files before zipping
+            if [ "$(find "$dir" -type f | wc -l)" -gt 0 ]; then
+              zip -r "artifacts/${dir_name}.zip" "$dir"
+            else
+              echo "Skipping $dir_name: No files to package."
+            fi
           done
 
       - name: Upload all lambda artifacts to S3
