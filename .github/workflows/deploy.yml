@@ -61,11 +61,22 @@ jobs:
 
       - name: Deploy CloudFormation
         run: |
-          aws cloudformation deploy \
-            --template-file 05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
-            --stack-name recipe-sharing \
-            --capabilities CAPABILITY_IAM \
-            --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME FrontendBucket=$FRONTEND_BUCKET
+          # Deploy the CloudFormation stack if it doesn't exist,  If it does exist, update it.
+          if aws cloudformation describe-stacks --stack-name recipe-sharing; then
+            echo "Updating existing stack..."
+            aws cloudformation update-stack \
+              --template-body file://05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
+              --stack-name recipe-sharing \
+              --capabilities CAPABILITY_IAM \
+              --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME FrontendBucket=$FRONTEND_BUCKET
+          else
+            echo "Creating new stack..."
+            aws cloudformation create-stack \
+              --template-body file://05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
+              --stack-name recipe-sharing \
+              --capabilities CAPABILITY_IAM \
+              --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME FrontendBucket=$FRONTEND_BUCKET
+          fi
 
       - name: Build and Deploy Frontend
         run: |
@@ -85,7 +96,7 @@ jobs:
           echo "CloudFront Distribution URL: $CloudFrontDistributionUrl"
 
           # Replace the placeholders in the frontend config files
-          CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/config.tsx
+          CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/configs.tsx
           AWS_EXPORTS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/aws-exports.ts
           sed -i "s|YOUR_API_URL|$HttpApiEndpoint|" $CONFIGS_FILE
           sed -i "s|[CognitoRegion]|$CognitoRegion|g" $AWS_EXPORTS_FILE
