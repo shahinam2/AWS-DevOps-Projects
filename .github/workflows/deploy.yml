@@ -15,7 +15,6 @@ jobs:
     env:
       AWS_REGION: eu-central-1
       LAMBDAS_BUCKET_NAME: recipe-sharing-lambdas-${{ github.run_id }}
-      FRONTEND_BUCKET: recipe-sharing-frontend-${{ github.run_id }}
 
     steps:
       - name: Checkout repo
@@ -33,13 +32,6 @@ jobs:
           # Check if the bucket already exists. If it doesn't, create it.
           aws s3api head-bucket --bucket $LAMBDAS_BUCKET_NAME || \
           aws s3api create-bucket --bucket $LAMBDAS_BUCKET_NAME --region $AWS_REGION \
-            --create-bucket-configuration LocationConstraint=$AWS_REGION
-
-      - name: Ensure S3 bucket exists for frontend
-        run: |
-          # Check if the bucket already exists. If it doesn't, create it.
-          aws s3api head-bucket --bucket $FRONTEND_BUCKET || \
-          aws s3api create-bucket --bucket $FRONTEND_BUCKET --region $AWS_REGION \
             --create-bucket-configuration LocationConstraint=$AWS_REGION
 
       - name: Package all Lambda functions
@@ -65,8 +57,7 @@ jobs:
             --template-body file://05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
             --stack-name recipe-sharing \
             --capabilities CAPABILITY_IAM \
-            --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME FrontendBucket=$FRONTEND_BUCKET
-
+            --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME
 
       - name: Build and Deploy Frontend
         run: |
@@ -99,7 +90,8 @@ jobs:
           npm run build
 
           # Sync the build output to the S3 bucket
-          aws s3 sync 05_Recipe_Sharing_App_Serverless_Edition/frontend/dist/ s3://$FRONTEND_BUCKET/ --delete     # Uploads only changed files 
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+          aws s3 sync 05_Recipe_Sharing_App_Serverless_Edition/frontend/dist/ s3://recipesharing-frontend-$ACCOUNT_ID --delete     # Uploads only changed files 
 
           # Optionally, invalidate CloudFront cache
           # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
