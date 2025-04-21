@@ -34,15 +34,23 @@ jobs:
       - name: Package all Lambda functions
         run: |
           mkdir -p artifacts
-          for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
-          do
-            dir_name=$(basename "$dir")
-            # Check if the directory contains files before zipping
-            if [ "$(find "$dir" -type f | wc -l)" -gt 0 ]; then
-              zip -r "artifacts/${dir_name}.zip" "$dir"
-            else
-              echo "Skipping $dir_name: No files to package."
+          
+          # Each immediate sub-folder of /lambdas is treated as ONE Lambda  ➜  one .zip
+          for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/ ; do
+            fn_name=$(basename "$dir")
+          
+            # Skip empty folders so the job doesnt fail on half-finished work
+            if [ "$(find "$dir" -type f | wc -l)" -eq 0 ]; then
+              echo "⚠️ Skipping $fn_name - no files inside."
+              continue
             fi
+          
+            echo "📦  Zipping $fn_name …"
+          
+            (
+              cd "$dir"                    
+              zip -qr "../../artifacts/${fn_name}.zip" .  
+            )
           done
 
       - name: Upload all lambda artifacts to S3
@@ -68,15 +76,10 @@ jobs:
           
           # Extract the necessary output values
           HttpApiEndpoint=$(jq -r '.[] | select(.OutputKey=="HttpApiEndpoint") | .OutputValue' outputs.json)
-          echo "HTTP API Endpoint: $HttpApiEndpoint"
           UserPoolId=$(jq -r '.[] | select(.OutputKey=="UserPoolId") | .OutputValue' outputs.json)
-          echo "User Pool ID: $UserPoolId"
           UserPoolClientId=$(jq -r '.[] | select(.OutputKey=="UserPoolClientId") | .OutputValue' outputs.json)
-          echo "User Pool Client ID: $UserPoolClientId"
           CognitoRegion=$(jq -r '.[] | select(.OutputKey=="CognitoRegion") | .OutputValue' outputs.json)
-          echo "Cognito Region: $CognitoRegion"
           CloudFrontDistributionUrl=$(jq -r '.[] | select(.OutputKey=="CloudFrontDistributionUrl") | .OutputValue' outputs.json)
-          echo "CloudFront Distribution URL: $CloudFrontDistributionUrl"
 
           # Replace the placeholders in the frontend config files
           CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/configs.tsx
@@ -85,8 +88,6 @@ jobs:
           sed -i "s|CognitoRegion|$CognitoRegion|g" $AWS_EXPORTS_FILE
           sed -i "s|UserPoolId|$UserPoolId|" $AWS_EXPORTS_FILE
           sed -i "s|UserPoolClientId|$UserPoolClientId|" $AWS_EXPORTS_FILE
-          cat $CONFIGS_FILE
-          cat $AWS_EXPORTS_FILE
           
           # Build the frontend
           cd 05_Recipe_Sharing_App_Serverless_Edition/frontend
