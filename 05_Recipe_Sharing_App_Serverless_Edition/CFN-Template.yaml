@@ -489,9 +489,8 @@ Resources:
       Runtime: python3.9
       Handler: index.lambda_handler
       Code:
-        ZipFile: 
-          S3Bucket: !Ref LambdasBucketName
-          S3Key: lambdas/delete-recipe.zip
+        S3Bucket: !Ref LambdasBucketName
+        S3Key: lambdas/delete-recipe.zip
       Role: !GetAtt LambdaExecutionDeleteRecipeRole.Arn
       Timeout: 60         
 
