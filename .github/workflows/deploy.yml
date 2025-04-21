@@ -80,9 +80,11 @@ jobs:
           CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/configs.tsx
           AWS_EXPORTS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/aws-exports.ts
           sed -i "s|YOUR_API_URL|$HttpApiEndpoint|" $CONFIGS_FILE
-          sed -i "s|[CognitoRegion]|$CognitoRegion|g" $AWS_EXPORTS_FILE
-          sed -i "s|[UserPoolId]|$UserPoolId|" $AWS_EXPORTS_FILE
-          sed -i "s|[UserPoolClientId]|$UserPoolClientId|" $AWS_EXPORTS_FILE
+          sed -i "s|CognitoRegion|$CognitoRegion|g" $AWS_EXPORTS_FILE
+          sed -i "s|UserPoolId|$UserPoolId|" $AWS_EXPORTS_FILE
+          sed -i "s|UserPoolClientId|$UserPoolClientId|" $AWS_EXPORTS_FILE
+          cat $CONFIGS_FILE
+          cat $AWS_EXPORTS_FILE
           
           # Build the frontend
           cd 05_Recipe_Sharing_App_Serverless_Edition/frontend
