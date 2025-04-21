@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AWS_REGION: eu-central-1
-      LAMBDA_BUCKET_NAME: serverless-recipe-sharing-${{ github.run_id }}
+      LAMBDAS_BUCKET_NAME: recipe-sharing-lambdas-${{ github.run_id }}
+      FRONTEND_BUCKET: recipe-sharing-frontend-${{ github.run_id }}
 
     steps:
       - name: Checkout repo
@@ -30,34 +31,75 @@ jobs:
       - name: Ensure S3 bucket exists for Lambda codes
         run: |
           # Check if the bucket already exists. If it doesn't, create it.
-          aws s3api head-bucket --bucket $LAMBDA_BUCKET_NAME || \
-          aws s3api create-bucket --bucket $LAMBDA_BUCKET_NAME --region $AWS_REGION \
+          aws s3api head-bucket --bucket $LAMBDAS_BUCKET_NAME || \
+          aws s3api create-bucket --bucket $LAMBDAS_BUCKET_NAME --region $AWS_REGION \
             --create-bucket-configuration LocationConstraint=$AWS_REGION
 
-      - name: Package Lambda testauth
+      - name: Ensure S3 bucket exists for frontend
         run: |
-          # Create a directory for the artifacts
-          mkdir -p artifacts/testauth
-          cd 05_Recipe_Sharing_App_Serverless_Edition/lambdas/testauth
-          zip -r ../../../artifacts/testauth.zip .
+          # Check if the bucket already exists. If it doesn't, create it.
+          aws s3api head-bucket --bucket $FRONTEND_BUCKET || \
+          aws s3api create-bucket --bucket $FRONTEND_BUCKET --region $AWS_REGION \
+            --create-bucket-configuration LocationConstraint=$AWS_REGION
 
-      - name: Upload Lambda to S3
+      - name: Package all Lambda functions
         run: |
-          aws s3 cp artifacts/testauth.zip s3://$LAMBDA_BUCKET_NAME/lambdas/testauth.zip
+          mkdir -p artifacts
+          for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
+          do
+            dir_name=$(basename "$dir")
+            zip -r "artifacts/${dir_name}.zip" "$dir"
+          done
+
+      - name: Upload all lambda artifacts to S3
+        run: |
+          # Upload all the zip files to the S3 bucket
+          for file in artifacts/*.zip
+          do
+            aws s3 cp "$file" "s3://$LAMBDAS_BUCKET_NAME/lambdas/"
+          done
 
       - name: Deploy CloudFormation
         run: |
           aws cloudformation deploy \
-            --template-file 05_Recipe_Sharing_App_Serverless_Edition/CFN-Template-simple.yaml \
+            --template-file 05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
             --stack-name recipe-sharing \
             --capabilities CAPABILITY_IAM \
-            --parameter-overrides LambdaCodeBucket=$LAMBDA_BUCKET_NAME
+            --parameter-overrides LambdasBucketName=$LAMBDAS_BUCKET_NAME FrontendBucket=$FRONTEND_BUCKET
 
+      - name: Build and Deploy Frontend
+        run: |
+          # Get the cf template outputs
+          aws cloudformation describe-stacks --stack-name recipe-sharing --query "Stacks[0].Outputs" --output json > outputs.json
+          
+          # Extract the necessary output values
+          HttpApiEndpoint=$(jq -r '.[] | select(.OutputKey=="HttpApiEndpoint") | .OutputValue' outputs.json)
+          echo "HTTP API Endpoint: $HttpApiEndpoint"
+          UserPoolId=$(jq -r '.[] | select(.OutputKey=="UserPoolId") | .OutputValue' outputs.json)
+          echo "User Pool ID: $UserPoolId"
+          UserPoolClientId=$(jq -r '.[] | select(.OutputKey=="UserPoolClientId") | .OutputValue' outputs.json)
+          echo "User Pool Client ID: $UserPoolClientId"
+          CognitoRegion=$(jq -r '.[] | select(.OutputKey=="CognitoRegion") | .OutputValue' outputs.json)
+          echo "Cognito Region: $CognitoRegion"
+          CloudFrontDistributionUrl=$(jq -r '.[] | select(.OutputKey=="CloudFrontDistributionUrl") | .OutputValue' outputs.json)
+          echo "CloudFront Distribution URL: $CloudFrontDistributionUrl"
+
+          # Replace the placeholders in the frontend config files
+
+          #npm install
+          #npm run build
+
+          # Sync the build output to the S3 bucket
+          #aws s3 sync build/ "s3://$FRONTEND_BUCKET/" --delete
+
+          # Optionally, invalidate CloudFront cache if you are using CloudFront
+          # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
+        
       - name: Clean up
         if: always()  # This step will run even if the previous steps fail
         run: |
           # Remove the artifacts directory
           rm -rf artifacts
           # Optionally, delete the S3 bucket if you want to clean up after deployment
-          aws s3 rb s3://$LAMBDA_BUCKET_NAME --force
+          aws s3 rb s3://$LAMBDAS_BUCKET_NAME --force
           
