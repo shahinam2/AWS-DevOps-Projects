@@ -33,23 +33,24 @@ jobs:
 
       - name: Package all Lambda functions
         run: |
-          mkdir -p artifacts
+          # Absolute path avoids “how many ../ ?” problems entirely
+          ARTIFACTS_DIR="${GITHUB_WORKSPACE}/artifacts"
+          mkdir -p "$ARTIFACTS_DIR"                      # idempotent
           
-          # Each immediate sub-folder of /lambdas is treated as ONE Lambda  ➜  one .zip
           for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/ ; do
             fn_name=$(basename "$dir")
           
-            # Skip empty folders so the job doesnt fail on half-finished work
-            if [ "$(find "$dir" -type f | wc -l)" -eq 0 ]; then
+            # skip empty function folders
+            [ "$(find "$dir" -type f | wc -l)" -eq 0 ] && {
               echo "⚠️ Skipping $fn_name - no files inside."
               continue
-            fi
+            }
           
-            echo "📦  Zipping $fn_name …"
+            echo "📦 Zipping $fn_name …"
           
             (
-              cd "$dir"                    
-              zip -qr "../../artifacts/${fn_name}.zip" .  
+              cd "$dir"                     # inside the Lambda folder
+              zip -qr "${ARTIFACTS_DIR}/${fn_name}.zip" .   # write to root/artifacts
             )
           done
 
