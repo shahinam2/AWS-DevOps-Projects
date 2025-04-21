@@ -39,11 +39,8 @@ jobs:
           mkdir -p artifacts
           for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
           do
-            pwd
-            echo $dir
             dir_name=$(basename "$dir")
-            echo $dir_name
-            zip -r "../../artifacts/${dir_name}.zip" .
+            zip -r "artifacts/${dir_name}.zip" "$dir/*"
           done
 
       - name: Upload all lambda artifacts to S3
