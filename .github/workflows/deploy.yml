@@ -88,12 +88,12 @@ jobs:
           
           # Build the frontend
           cd 05_Recipe_Sharing_App_Serverless_Edition/frontend
-          npm install
+          npm ci
           npm run build
 
           # Sync the build output to the S3 bucket
           ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-          aws s3 sync 05_Recipe_Sharing_App_Serverless_Edition/frontend/dist/ s3://recipesharing-frontend-$ACCOUNT_ID --delete     # Uploads only changed files 
+          aws s3 sync dist/ s3://recipesharing-frontend-$ACCOUNT_ID --delete     # Uploads only changed files 
 
           # Optionally, invalidate CloudFront cache
           # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
