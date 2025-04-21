@@ -7,14 +7,11 @@ on:
 
 env:
   AWS_REGION: eu-central-1
-  LAMBDA_BUCKET: my-lambda-code-bucket
+  LAMBDAS_BUCKET_NAME: recipe-sharing-lambdas-${{ github.run_id }}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      AWS_REGION: eu-central-1
-      LAMBDAS_BUCKET_NAME: recipe-sharing-lambdas-${{ github.run_id }}
 
     steps:
       - name: Checkout repo
