@@ -78,7 +78,7 @@ jobs:
 
           # Replace the placeholders in the frontend config files
           CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/configs.tsx
-          AWS_EXPORTS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/aws-exports.ts
+          AWS_EXPORTS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/aws-exports.ts
           sed -i "s|YOUR_API_URL|$HttpApiEndpoint|" $CONFIGS_FILE
           sed -i "s|[CognitoRegion]|$CognitoRegion|g" $AWS_EXPORTS_FILE
           sed -i "s|[UserPoolId]|$UserPoolId|" $AWS_EXPORTS_FILE
