@@ -56,7 +56,7 @@ jobs:
       - name: Deploy CloudFormation
         run: |
           aws cloudformation deploy \
-          --template-body 05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
+          --template-file 05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
           --stack-name recipe-sharing \
           --capabilities CAPABILITY_IAM \
           --parameter-overrides "LambdasBucketName=$LAMBDAS_BUCKET_NAME"
