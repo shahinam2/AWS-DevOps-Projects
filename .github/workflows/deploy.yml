@@ -51,13 +51,13 @@ jobs:
             aws s3 cp "$file" "s3://$LAMBDAS_BUCKET_NAME/lambdas/"
           done
 
-      - name: Deploy CloudFormation
-        run: |
-          aws cloudformation create-stack \
-          --template-body file://05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
-          --stack-name recipe-sharing \
-          --capabilities CAPABILITY_IAM \
-          --parameter-overrides ParameterKey=LambdasBucketName,ParameterValue=$LAMBDAS_BUCKET_NAME
+      # - name: Deploy CloudFormation
+      #   run: |
+      #     aws cloudformation create-stack \
+      #     --template-body file://05_Recipe_Sharing_App_Serverless_Edition/CFN-Template.yaml \
+      #     --stack-name recipe-sharing \
+      #     --capabilities CAPABILITY_IAM \
+      #     --parameter-overrides 
 
       - name: Build and Deploy Frontend
         run: |
