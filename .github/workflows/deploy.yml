@@ -38,8 +38,10 @@ jobs:
         run: |
           mkdir -p artifacts
           for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
+          echo $dir
           do
             dir_name=$(basename "$dir")
+            echo $dir_name
             (cd "$dir" && zip -r "../../artifacts/${dir_name}.zip" .)
           done
 
