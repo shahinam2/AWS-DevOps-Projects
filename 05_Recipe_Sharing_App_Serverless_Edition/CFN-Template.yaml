@@ -34,10 +34,6 @@ Parameters:
     Type: String
     Description: S3 bucket name for Lambda code
 
-  FrontendBucket:
-    Type: String
-    Description: S3 bucket name for frontend code
-
 Resources:
 
 #FRONTEND
