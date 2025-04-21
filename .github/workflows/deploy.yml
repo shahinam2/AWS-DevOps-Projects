@@ -40,7 +40,7 @@ jobs:
           for dir in 05_Recipe_Sharing_App_Serverless_Edition/lambdas/*/
           do
             dir_name=$(basename "$dir")
-            zip -r "artifacts/${dir_name}.zip" "$dir"
+            (cd "$dir" && zip -r "../../artifacts/${dir_name}.zip" .)
           done
 
       - name: Upload all lambda artifacts to S3
