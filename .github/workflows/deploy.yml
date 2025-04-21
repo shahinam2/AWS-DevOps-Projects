@@ -85,16 +85,24 @@ jobs:
           echo "CloudFront Distribution URL: $CloudFrontDistributionUrl"
 
           # Replace the placeholders in the frontend config files
-
-          #npm install
-          #npm run build
+          CONFIGS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/configs/config.tsx
+          AWS_EXPORTS_FILE=05_Recipe_Sharing_App_Serverless_Edition/frontend/src/aws-exports.ts
+          sed -i "s|YOUR_API_URL|$HttpApiEndpoint|" $CONFIGS_FILE
+          sed -i "s|[CognitoRegion]|$CognitoRegion|g" $AWS_EXPORTS_FILE
+          sed -i "s|[UserPoolId]|$UserPoolId|" $AWS_EXPORTS_FILE
+          sed -i "s|[UserPoolClientId]|$UserPoolClientId|" $AWS_EXPORTS_FILE
+          
+          # Build the frontend
+          cd 05_Recipe_Sharing_App_Serverless_Edition/frontend
+          npm install
+          npm run build
 
           # Sync the build output to the S3 bucket
-          #aws s3 sync build/ "s3://$FRONTEND_BUCKET/" --delete
+          aws s3 sync 05_Recipe_Sharing_App_Serverless_Edition/frontend/dist/ s3://$FRONTEND_BUCKET/ --delete     # Uploads only changed files 
 
-          # Optionally, invalidate CloudFront cache if you are using CloudFront
+          # Optionally, invalidate CloudFront cache
           # aws cloudfront create-invalidation --distribution-id YOUR_DISTRIBUTION_ID --paths "/*"
-        
+
       - name: Clean up
         if: always()  # This step will run even if the previous steps fail
         run: |
