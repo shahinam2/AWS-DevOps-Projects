@@ -59,6 +59,8 @@ Notes:
 - Add a step to the pipeline to run unit tests before deploying the code.
 - Add HTTPS
 
+---
+
 ### Notes
 - This project is a demonstration of how to deploy a recipe sharing application using AWS services. It is not intended for production use and should be used for educational purposes only. The code and resources provided in this project are provided "as is" without warranty of any kind, either express or implied. **Use it at your own risk**.
 - For better **observability and monitoring**, you can integrate AWS CloudWatch or any preferred solution to monitor the application and set up alarms for any issues that may arise.
