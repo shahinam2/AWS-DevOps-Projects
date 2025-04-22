@@ -50,7 +50,7 @@ Here are the steps that the pipeline performs:
 6. Build and deploy the frontend to the specified S3 bucket so that it can be served by CloudFront.  
 
 Notes:
-- The CI/CD pipeline configuration file is [here](https://github.com/shahinam2/AWS-DevOps-Projects/tree/main/05_Recipe_Sharing_App_Serverless_Edition/CICD/deploy.yaml).  
+- The CI/CD pipeline configuration file is [here](https://github.com/shahinam2/AWS-DevOps-Projects/blob/main/05_Recipe_Sharing_App_Serverless_Edition/CICD/deploy.yml).  
 - You can view a successful CI/CD pipeline run on GitHub Actions [here](https://github.com/shahinam2/AWS-DevOps-Projects/actions/runs/14596128230/job/40942369012)
 
 ### Further Work & Optimisation
