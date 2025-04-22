@@ -1,9 +1,9 @@
 name: Deploy Recipe Sharing App Serverless Stack
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:  # allows manual trigger from GitHub UI
+  # push:
+  #   branches: [ main ]
 
 env:
   AWS_REGION: eu-central-1

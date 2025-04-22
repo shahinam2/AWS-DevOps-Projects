@@ -135,8 +135,8 @@ Resources:
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true  # Change to false to allow users to sign up
         InviteMessageTemplate:
-          EmailMessage: "Hello {username}.\nThis {####} is your temporary password for Recipe Sharring Serverless App.\nPlease change it after your first login."
           EmailSubject: "Your Recipe Sharring App temporary password"
+          EmailMessage: "Hello {username}.\n {####} is your temporary password for Recipe Sharring Serverless App.\nPlease change it after your first login."
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
       Schema:
