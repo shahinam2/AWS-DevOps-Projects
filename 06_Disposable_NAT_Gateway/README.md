@@ -1,10 +1,16 @@
-### Project Goal & Motivation
-The goal of this project is to create a disposable NAT Gateway to reduce costs and improve security in AWS. The NAT Gateway is destroyed after use, which helps to reduce costs and improve security. 
-This approach uses the pay-as-you-go model of AWS, where you only pay for what you use.
+### Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking
+This project provides a disposable NAT Gateway solution designed to lower costs and improve security in AWS environments. The NAT Gateway is created only for a defined time window and automatically destroyed afterward. This model fully utilizes AWS’s pay-as-you-go pricing, ensuring that you only pay for the NAT Gateway while it’s actually needed.
 
-The motivation for this project was rooted in a discussion with a colleague about the high costs associated with NAT Gateways in AWS and also the security risks associated with self managed NAT Instances. So I thought it would be a good idea to create a disposable NAT Gateway that could be destroyed after use. This would help to reduce costs and improve security.
+**Why This Project?**  
+The idea for this solution came from a discussion with a colleague about the high ongoing costs of NAT Gateways in AWS, alongside the operational risks of self-managed NAT Instances. Instead of keeping a NAT Gateway active at all times, this project enables you to spin up the gateway temporarily—reducing your attack surface and cutting unnecessary costs.
 
-So if you have a need for a NAT Gateway in your AWS environment, but you don't want to pay for it all the time, this project is for you. all you need to do is to make sure that your app start the update process at a specific time, and the disposable NAT Gateway will be created and destroyed at that time automatically.
+**How It Works**  
+To use this disposable NAT Gateway effectively, the developer must configure their application to perform updates within a specified time window. This time window should include a small buffer period at the beginning to allow the NAT Gateway to be deployed and become fully operational before the application’s update process starts.
+
+For example, if your app's update is scheduled to begin at 02:10 AM, you might define the NAT Gateway’s availability window from 02:00 AM to 03:00 AM. This ensures that the NAT Gateway is ready when the update begins and is safely removed afterward.
+
+**Who Is This For?**  
+This solution is ideal for developers and teams who need outbound internet access (via NAT) during specific operations like nightly updates or scheduled batch jobs—but do not require NAT availability around the clock. It helps keep your infrastructure lean, secure, and cost-effective without manual intervention.
 
 ### Architecture
 <img src="readme-files/Disposable-NAT-GW-Diagram.gif" alt="Disposable NAT Gateway Architecture" width="1000"/>  
