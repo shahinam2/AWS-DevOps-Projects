@@ -1,0 +1,251 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: | 
+  Create and destroy a NAT Gateway at specified intervals using CloudFormation.
+
+Parameters:
+  PublicSubnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: The ID of the public subnet where the NAT Gateway will be created.
+
+  PrivateRouteTable:
+    Type: String
+    Description: The ID of the private route table to which the NAT Gateway route will be added.
+
+  CreateNATGWScheduleExpression:
+    Type: String
+    Description: The schedule expression (cron or rate) for creating the NAT Gateway.
+    Default: 'cron(0 3 ? * 1 *)'  # Every Sunday at 3 AM UTC by default
+
+  DeleteNATGWScheduleExpression:
+    Type: String
+    Description: The schedule expression (cron or rate) for deleting the NAT Gateway.
+    Default: 'cron(0 4 ? * 1 *)'  # Every Sunday at 4 AM UTC by default
+
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  LambdaExecutionPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: EC2NATGatewayPermissions
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:AllocateAddress
+              - ec2:ReleaseAddress
+              - ec2:DescribeAddresses
+              - ec2:CreateNatGateway
+              - ec2:DeleteNatGateway
+              - ec2:DescribeNatGateways
+              - ec2:CreateRoute
+              - ec2:ReplaceRoute
+              - ec2:DeleteRoute
+              - ec2:DescribeRouteTables
+              - ec2:DescribeSubnets
+              - ec2:CreateTags
+            Resource: "*"
+      Roles:
+        - !Ref LambdaExecutionRole
+
+  CreateNATGWFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: create_nat_gateway
+      Runtime: python3.13
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import time
+          
+          def lambda_handler(event, context):
+            ec2 = boto3.client('ec2')
+            
+            # Allocate Elastic IP
+            eip = ec2.allocate_address(Domain='vpc')
+            allocation_id = eip['AllocationId']
+            
+            # Create NAT Gateway
+            nat_gateway = ec2.create_nat_gateway(
+                AllocationId=allocation_id,
+                SubnetId=os.environ['SUBNET_ID'],
+                TagSpecifications=[
+                    {
+                        'ResourceType': 'natgateway',
+                        'Tags': [
+                            {'Key': 'Name', 'Value': 'Disposable-NATGateway4' },
+                        ]
+                    }
+                ]
+            )
+
+            nat_gateway_id = nat_gateway['NatGateway']['NatGatewayId']
+            print(f"Created NAT Gateway ID: {nat_gateway_id}")
+          
+            # Wait for NAT Gateway to become available
+            while True:
+                response = ec2.describe_nat_gateways(NatGatewayIds=[nat_gateway_id])
+                state = response['NatGateways'][0]['State']
+                print(f"NAT Gateway state: {state}")
+                if state == 'available':
+                    break
+                elif state == 'failed':
+                    raise Exception(f"NAT Gateway creation failed! ID: {nat_gateway_id}")
+                time.sleep(10)  # Wait 10 seconds between checks
+          
+            # After NAT Gateway is ready, create the route
+            private_route_table_id = os.environ['PRIVATE_ROUTE_TABLE']
+            ec2.create_route(
+                RouteTableId=private_route_table_id,
+                DestinationCidrBlock='0.0.0.0/0',
+                NatGatewayId=nat_gateway_id
+            )
+
+            return {
+                'statusCode': 200,
+                'body': f'NAT Gateway {nat_gateway_id} created and route added successfully.'
+            }
+      Environment:  
+        Variables:
+          PRIVATE_ROUTE_TABLE: !Ref PrivateRouteTable
+          SUBNET_ID: !Ref PublicSubnet
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 180
+
+  DeleteNATGWFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: delete_nat_gateway
+      Runtime: python3.13
+      Handler: index.lambda_handler
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+          import time
+            
+          def lambda_handler(event, context):
+            ec2 = boto3.client('ec2')
+          
+            # Filter NAT Gateways by Name tag
+            response = ec2.describe_nat_gateways(
+                Filters=[{'Name': 'tag:Name', 'Values': ['Disposable-NATGateway4']}]
+            )
+            
+            nat_gateways = response.get('NatGateways', [])
+            if not nat_gateways:
+                raise Exception("No NAT Gateway found with Name 'Disposable-NATGateway4'")
+            
+            # If multiple matches, optionally handle here
+            # For now, take the first one
+            nat_gateway = nat_gateways[0]
+            nat_gateway_id = nat_gateway['NatGatewayId']
+            print(f"Found NAT Gateway ID: {nat_gateway_id}")
+            
+            # Get Allocation ID (Elastic IP)
+            addresses = nat_gateway.get('NatGatewayAddresses', [])
+            if not addresses:
+                raise Exception(f"No Elastic IP found attached to NAT Gateway {nat_gateway_id}")
+            allocation_id = addresses[0]['AllocationId']
+            print(f"Elastic IP Allocation ID: {allocation_id}")  
+            # Delete the NAT Gateway
+            ec2.delete_nat_gateway(NatGatewayId=nat_gateway_id)
+            print(f"Deleted NAT Gateway ID: {nat_gateway_id}")
+            
+            # Wait for NAT Gateway to be deleted
+            while True:
+                response = ec2.describe_nat_gateways(NatGatewayIds=[nat_gateway_id])
+                state = response['NatGateways'][0]['State']
+                print(f"NAT Gateway state: {state}")
+                if state == 'deleted':
+                    break
+                elif state == 'failed':
+                    raise Exception(f"NAT Gateway deletion failed! ID: {nat_gateway_id}")
+                time.sleep(10)  # Wait 10 seconds between checks
+            
+            # Release the Elastic IP
+            ec2.release_address(AllocationId=allocation_id)
+            print(f"Released Elastic IP Allocation ID: {allocation_id}")
+          
+            # Delete the NAT-GW route
+            private_route_table_id = os.environ['PRIVATE_ROUTE_TABLE']
+            ec2.delete_route(
+                RouteTableId=private_route_table_id,
+                DestinationCidrBlock='0.0.0.0/0'
+            )
+            print(f"Deleted route for NAT Gateway in route table {private_route_table_id}")
+          
+            return {
+              'statusCode': 200,
+              'body': f'NAT Gateway {nat_gateway_id} deleted and Elastic IP released and route deleted successfully.'
+            }  
+      Environment:  
+        Variables:
+          PRIVATE_ROUTE_TABLE: !Ref PrivateRouteTable
+          SUBNET_ID: !Ref PublicSubnet
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 180
+
+  NATGatewayCreateScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: create-nat-gateway-schedule
+      Description: Trigger Lambda to create NAT Gateway at specified intervals
+      ScheduleExpression: !Ref CreateNATGWScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt CreateNATGWFunction.Arn
+          Id: "CreateNATGWTarget"
+          RoleArn: !GetAtt EventBridgeInvokeRole.Arn
+
+  NATGatewayDeleteScheduleRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: delete-nat-gateway-schedule
+      Description: Trigger Lambda to delete NAT Gateway at specified intervals
+      ScheduleExpression: !Ref DeleteNATGWScheduleExpression
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt DeleteNATGWFunction.Arn
+          Id: "DeleteNATGWTarget"
+          RoleArn: !GetAtt EventBridgeInvokeRole.Arn
+
+  EventBridgeInvokeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: AllowLambdaInvoke
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 'lambda:InvokeFunction'
+                Resource: !GetAtt CreateNATGWFunction.Arn
+              - Effect: Allow
+                Action: 'lambda:InvokeFunction'
+                Resource: !GetAtt DeleteNATGWFunction.Arn
+
+
