@@ -27,12 +27,12 @@ There are 4 parameters that you should provide to the cloudformation template:
 ### How to deploy the solution:
 Fetch the cloudformation template from the repository:
 ```bash
-
+wget https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/06_Disposable_NAT_Gateway/CFN-Template.yaml
 ```
 And deploy it using the AWS CLI or AWS Management Console.
 Using the AWS CLI:
 ```bash
-aws cloudformation create-stack --stack-name DisposableNATGateway --template-body file://path/to/template.yaml --parameters ParameterKey=PublicSubnet,ParameterValue=subnet-12345678 ParameterKey=PrivateRouteTable,ParameterValue=routetable-12345678 ParameterKey=CreateNATGWScheduleExpression,ParameterValue="cron(0 12 * * ? *)" ParameterKey=DeleteNATGWScheduleExpression,ParameterValue="cron(0 12 * * ? *)"
+aws cloudformation create-stack --stack-name DisposableNATGateway --template-body file://CFN-Template.yaml --parameters ParameterKey=PublicSubnet,ParameterValue=<Your-Public-Subnet-ID-Here> ParameterKey=PrivateRouteTable,ParameterValue=<Your-Private-RT-ID-Here> ParameterKey=CreateNATGWScheduleExpression,ParameterValue="Your-Start-Cron-as-String-Here" ParameterKey=DeleteNATGWScheduleExpression,ParameterValue="Your-End-Cron-as-String-Here"
 ```
 Using the AWS Management Console:
 1. Go to the CloudFormation service in the AWS Management Console.
