@@ -1,0 +1,4 @@
+- The app accepts .jpeg and .png
+- Rekognition supports up to 100 requests per second
+- In us-east-1 1 image analysis costs $0.001
+- 
