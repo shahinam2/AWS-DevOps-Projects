@@ -17,8 +17,12 @@ This solution is ideal for developers and teams who need outbound internet acces
 
 ### Used Services:
 - EventBridge
+  - EventBridge is used to schedule the creation and deletion of the NAT Gateway.
 - AWS Lambda
+   - Two Lambda functions are created: one for creating the NAT Gateway and another for deleting it.
+   - The Lambda functions are triggered by EventBridge rules based on the provided cron schedule expressions.
 - CloudFormation
+   - The entire solution is deployed using a CloudFormation template, which automates the creation of the necessary resources.
 
 ### Pre-requisites:
 There are 4 parameters that you should provide to the cloudformation template:
