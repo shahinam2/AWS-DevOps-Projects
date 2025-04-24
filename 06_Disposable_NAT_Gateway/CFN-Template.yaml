@@ -3,6 +3,11 @@ Description: |
   Create and destroy a NAT Gateway at specified intervals using CloudFormation.
 
 Parameters:
+  NATGWName:
+    Type: String
+    Description: The name of the NAT Gateway.
+    Default: Disposable-NATGateway
+
   PublicSubnet:
     Type: AWS::EC2::Subnet::Id
     Description: The ID of the public subnet where the NAT Gateway will be created.
@@ -89,7 +94,7 @@ Resources:
                     {
                         'ResourceType': 'natgateway',
                         'Tags': [
-                            {'Key': 'Name', 'Value': 'Disposable-NATGateway4' },
+                            {'Key': 'Name', 'Value': os.environ['NAT_GW_NAME']},
                         ]
                     }
                 ]
@@ -125,6 +130,7 @@ Resources:
         Variables:
           PRIVATE_ROUTE_TABLE: !Ref PrivateRouteTable
           SUBNET_ID: !Ref PublicSubnet
+          NAT_GW_NAME: !Ref NATGWName
       Role: !GetAtt LambdaExecutionRole.Arn
       Timeout: 180
 
@@ -145,12 +151,12 @@ Resources:
           
             # Filter NAT Gateways by Name tag
             response = ec2.describe_nat_gateways(
-                Filters=[{'Name': 'tag:Name', 'Values': ['Disposable-NATGateway4']}]
+                Filters=[{'Name': 'tag:Name', 'Values': [os.environ['NAT_GW_NAME']]}]
             )
             
             nat_gateways = response.get('NatGateways', [])
             if not nat_gateways:
-                raise Exception("No NAT Gateway found with Name 'Disposable-NATGateway4'")
+                raise Exception(f"No NAT Gateway found with Name '{os.environ['NAT_GW_NAME']}'")
             
             # If multiple matches, optionally handle here
             # For now, take the first one
@@ -199,6 +205,7 @@ Resources:
         Variables:
           PRIVATE_ROUTE_TABLE: !Ref PrivateRouteTable
           SUBNET_ID: !Ref PublicSubnet
+          NAT_GW_NAME: !Ref NATGWName
       Role: !GetAtt LambdaExecutionRole.Arn
       Timeout: 180
 

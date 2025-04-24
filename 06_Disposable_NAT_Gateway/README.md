@@ -1,8 +1,11 @@
+### Architecture
+<img src="readme-files/Disposable-NAT-GW-Diagram.gif" alt="Disposable NAT Gateway Architecture" width="1000"/>
+
 ### Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking
 This project provides a disposable NAT Gateway solution designed to lower costs and improve security in AWS environments. The NAT Gateway is created only for a defined time window and automatically destroyed afterward. This model fully utilizes AWS’s pay-as-you-go pricing, ensuring that you only pay for the NAT Gateway while it’s actually needed.
 
-**Why This Project?**  
-The idea for this solution came from a discussion with a colleague about the high ongoing costs of NAT Gateways in AWS, alongside the operational risks of self-managed NAT Instances. Instead of keeping a NAT Gateway active at all times, this project enables you to spin up the gateway temporarily—reducing your attack surface and cutting unnecessary costs.
+**Motivation**  
+The idea for this solution came from a discussion with a colleague about the high ongoing costs of NAT Gateways in AWS, alongside the operational risks of self-managed NAT Instances. Instead of keeping a NAT Gateway active at all times, this project enables you to spin up a NAT Gateway temporarily—reducing your attack surface and cutting unnecessary costs.
 
 **How It Works**  
 To use this disposable NAT Gateway effectively, the developer must configure their application to perform updates within a specified time window. This time window should include a small buffer period at the beginning to allow the NAT Gateway to be deployed and become fully operational before the application’s update process starts.
@@ -12,8 +15,65 @@ For example, if your app's update is scheduled to begin at 02:10 AM, you might d
 **Who Is This For?**  
 This solution is ideal for developers and teams who need outbound internet access (via NAT) during specific operations like nightly updates or scheduled batch jobs—but do not require NAT availability around the clock. It helps keep your infrastructure lean, secure, and cost-effective without manual intervention.
 
-### Architecture
-<img src="readme-files/Disposable-NAT-GW-Diagram.gif" alt="Disposable NAT Gateway Architecture" width="1000"/>  
+---
+
+### Cost Analysis
+**Disposable NAT Gateway vs. Disposable NAT Instance: Key Considerations**
+| Factor | NAT Gateway | NAT Instance (t2.micro) |
+|--------|-------------|-------------------------|
+| TCO(Total Cost of Ownership) |	None | High (OS, monitoring, patching, zero day exploits, etc.) |
+| Setup Complexity | Fully managed by AWS |	Manual config (disable source/dest checks, security groups) |
+| Scalability | Auto-scales to 100 Gbps | Limited to instance type (1 Gbps for t2.micro) |
+| High Availability | Built-in Multi-AZ redundancy | Requires custom failover scripting |
+| Production Readiness | Yes | No (requires additional setup) |
+
+**Cost Analysis of the Disposable NAT Gateway Solution**  
+A summary of per-cycle AWS costs for running a NAT Gateway for one hour in eu-central-1, orchestrated by Lambda and EventBridge.
+
+| Service | Usage per cycle | Price |	Cost per cycle |
+|---------|------------------|-------|-----------------|
+| NAT Gateway | 1 hour | $0.052/hour | $0.052 |
+| Lambda | 2 invocations, 128MB, 2 min each | $0.20 per 1M requests | within always free plan |
+| EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
+| EIP | 1 hour | $0.005/hour | $0.005 |
+| Data Transfer/Processing | 1 GB | $0.052/GB | $0.052 |
+| **Total per cycle** | | | **$0.109** |
+
+**Cost Analysis of the Disposable NAT instance Solution**  
+| Service | Usage per cycle | Price |	Cost per cycle |
+|---------|------------------|-------|-----------------|
+| EC2 instance | 1 hour | $0.0134/hour | $0.0134 |
+| Lambda | 2 invocations, 128MB, 2 min each | $0.20 per 1M requests | within always free plan | 
+| EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
+| EIP | 1 hour | $0.005/hour | $0.005 |
+| Data Transfer/Processing | 1 GB | $0.09/GB | $0.09 |
+| **Total per cycle** | | | **$0.1084** |
+
+Notes:
+- Each cycle is defined as the time between the creation and deletion of the NAT Gateway or NAT Instance which is 1 hour.
+- The above costs are based on the AWS pricing as of April 2025 and based on Europe (Frankfurt) region.
+- I'm assuming that we have already passed the first year of free tier for the NAT instance.
+- 1 GB of data transfer is assumed for both solutions.
+- There will be data transfer charges between your NAT gateway and EC2 instance if they are in a different Availability Zone.
+
+Use NAT Gateway If:
+- Reliability is critical (e.g., production workloads).
+- Traffic is bursty or unpredictable (auto-scales seamlessly).
+- Minimal engineering resources for setup/maintenance.
+- High bandwidth needs (>5 Gbps).
+- Example: Production environments with strict uptime requirements.
+ 
+Use NAT Instance If:
+- Cost optimization is a priority (up to 75% cheaper).
+- Low/stable traffic (e.g., dev/test environments).
+- Advanced configurations needed (e.g., port forwarding, bastion host).
+- Free Tier eligible (t2.micro is free for 750 hrs/month).
+- Example: Automated sandbox environments spun up/down hourly.
+
+**Personal Note:**  
+Although the price of the NAT Gateway is generally higher than that of a NAT Instance, the benefits in terms of reliability and management often outweigh the costs for production environments.
+
+---
 
 ### Used Services:
 - EventBridge
@@ -93,7 +153,8 @@ Using the AWS Management Console:
 
 ### Further Work & Optimisation
 - Add a CloudWatch alarm to monitor the NAT Gateway and notify when it is created or deleted.
-- Expand the solution to support multiple NAT Gateways.
+- ~~Expand the solution to support multiple NAT Gateways.~~
+  - You can now deply this solution multiple times without any issue. you just have to provide different name for each NAT Gateway.
 - Separate the lambda functions from the CloudFormation template for better modularity.
 
 ---
