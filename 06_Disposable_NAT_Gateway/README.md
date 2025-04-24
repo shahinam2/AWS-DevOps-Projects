@@ -95,16 +95,20 @@ There are 4 parameters that you should provide to the cloudformation template:
    - Same as above, but for deleting the NAT Gateway.
 
 ### How to deploy the solution:
-Fetch the cloudformation template from the repository:
+Fetch the cloudformation template & its parameters file from this repository:
 ```bash
 wget https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/06_Disposable_NAT_Gateway/CFN-Template.yaml
+wget https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/06_Disposable_NAT_Gateway/parameters.json
 ```
-And deploy it using the AWS CLI or AWS Management Console.
-Using the AWS CLI:
+Deploy it using the AWS CLI:
 ```bash
-aws cloudformation create-stack --stack-name DisposableNATGateway --template-body file://CFN-Template.yaml --parameters ParameterKey=PublicSubnet,ParameterValue=<Your-Public-Subnet-ID-Here> ParameterKey=PrivateRouteTable,ParameterValue=<Your-Private-RT-ID-Here> ParameterKey=CreateNATGWScheduleExpression,ParameterValue="Your-Start-Cron-as-String-Here" ParameterKey=DeleteNATGWScheduleExpression,ParameterValue="Your-End-Cron-as-String-Here"
+aws cloudformation create-stack \ 
+  --stack-name DisposableNATGateway \
+  --template-body file://CFN-Template.yaml \
+  --parameters file://parameters.json
 ```
-Using the AWS Management Console:
+
+Or using the AWS Management Console:
 1. Go to the CloudFormation service in the AWS Management Console.
 2. Click on "Create stack" and select "With new resources (standard)".
 3. Upload the cloudformation template file and click "Next".
@@ -154,7 +158,7 @@ Using the AWS Management Console:
 ### Further Work & Optimisation
 - Add a CloudWatch alarm to monitor the NAT Gateway and notify when it is created or deleted.
 - ~~Expand the solution to support multiple NAT Gateways.~~
-  - You can now deply this solution multiple times without any issue. you just have to provide different name for each NAT Gateway.
+  - You can now deploy this solution multiple times without any issue. you just have to provide different name for each NAT Gateway.
 - Separate the lambda functions from the CloudFormation template for better modularity.
 
 ---

@@ -1,0 +1,23 @@
+[
+    {
+      "ParameterKey": "NATGWName",
+      "ParameterValue": "Your-NAT-Gateway-Name-Here"
+    },
+    {
+      "ParameterKey": "PublicSubnet",
+      "ParameterValue": "Your-Public-Subnet-ID-Here"
+    },
+    {
+      "ParameterKey": "PrivateRouteTable",
+      "ParameterValue": "Your-Private-Route-Table-ID-Here"
+    },
+    {
+      "ParameterKey": "CreateNATGWScheduleExpression",
+      "ParameterValue": "cron(0 3 ? * 1 *)"
+    },
+    {
+      "ParameterKey": "DeleteNATGWScheduleExpression",
+      "ParameterValue": "cron(0 4 ? * 1 *)"
+    }
+  ]
+  

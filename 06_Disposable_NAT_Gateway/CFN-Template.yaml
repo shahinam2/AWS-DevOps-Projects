@@ -5,25 +5,25 @@ Description: |
 Parameters:
   NATGWName:
     Type: String
-    Description: The name of the NAT Gateway.
+    Description: Enter the name of the NAT Gateway.
     Default: Disposable-NATGateway
 
   PublicSubnet:
     Type: AWS::EC2::Subnet::Id
-    Description: The ID of the public subnet where the NAT Gateway will be created.
+    Description: Select the ID of the public subnet where the NAT Gateway will be created.
 
   PrivateRouteTable:
     Type: String
-    Description: The ID of the private route table to which the NAT Gateway route will be added.
+    Description: Enter the ID of the private route table to which the NAT Gateway route will be added.
 
   CreateNATGWScheduleExpression:
     Type: String
-    Description: The schedule expression (cron or rate) for creating the NAT Gateway.
+    Description: Enter a cron based schedule expression for creating the NAT Gateway.
     Default: 'cron(0 3 ? * 1 *)'  # Every Sunday at 3 AM UTC by default
 
   DeleteNATGWScheduleExpression:
     Type: String
-    Description: The schedule expression (cron or rate) for deleting the NAT Gateway.
+    Description: Enter a cron based schedule expression for deleting the NAT Gateway.
     Default: 'cron(0 4 ? * 1 *)'  # Every Sunday at 4 AM UTC by default
 
 Resources:
