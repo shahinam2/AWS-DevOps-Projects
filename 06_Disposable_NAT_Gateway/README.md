@@ -18,7 +18,7 @@ This solution is ideal for developers and teams who need outbound internet acces
 ---
 
 ### Cost Analysis
-**Disposable NAT Gateway vs. Disposable NAT Instance: Key Considerations**
+**Disposable NAT Gateway vs. Disposable NAT Instance: Key Considerations:**
 | Factor | NAT Gateway | NAT Instance (t2.micro) |
 |--------|-------------|-------------------------|
 | TCO(Total Cost of Ownership) |	None | High (OS, monitoring, patching, zero day exploits, etc.) |
@@ -27,9 +27,7 @@ This solution is ideal for developers and teams who need outbound internet acces
 | High Availability | Built-in Multi-AZ redundancy | Requires custom failover scripting |
 | Production Readiness | Yes | No (requires additional setup) |
 
-**Cost Analysis of the Disposable NAT Gateway Solution**  
-A summary of per-cycle AWS costs for running a NAT Gateway for one hour in eu-central-1, orchestrated by Lambda and EventBridge.
-
+**Cost Analysis of the Disposable NAT Gateway Solution:**  
 | Service | Usage per cycle | Price |	Cost per cycle |
 |---------|------------------|-------|-----------------|
 | NAT Gateway | 1 hour | $0.052/hour | $0.052 |
@@ -37,9 +35,9 @@ A summary of per-cycle AWS costs for running a NAT Gateway for one hour in eu-ce
 | EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
 | EIP | 1 hour | $0.005/hour | $0.005 |
 | Data Transfer/Processing | 1 GB | $0.052/GB | $0.052 |
-| **Total per cycle** | | | **$0.109** |
+| **Total cost per cycle** | | | **$0.109** |
 
-**Cost Analysis of the Disposable NAT instance Solution**  
+**Cost Analysis of the Disposable NAT instance Solution:**  
 | Service | Usage per cycle | Price |	Cost per cycle |
 |---------|------------------|-------|-----------------|
 | EC2 instance | 1 hour | $0.0134/hour | $0.0134 |
@@ -47,7 +45,7 @@ A summary of per-cycle AWS costs for running a NAT Gateway for one hour in eu-ce
 | EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
 | EIP | 1 hour | $0.005/hour | $0.005 |
 | Data Transfer/Processing | 1 GB | $0.09/GB | $0.09 |
-| **Total per cycle** | | | **$0.1084** |
+| **Total cost per cycle** | | | **$0.1084** |
 
 Notes:
 - Each cycle is defined as the time between the creation and deletion of the NAT Gateway or NAT Instance which is 1 hour.
