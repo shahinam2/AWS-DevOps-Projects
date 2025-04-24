@@ -34,7 +34,7 @@ This solution is ideal for developers and teams who need outbound internet acces
 | Lambda | 2 invocations, 128MB, 2 min each | $0.20 per 1M requests | within always free plan |
 | EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
 | EIP | 1 hour | $0.005/hour | $0.005 |
-| Data Transfer/Processing | 1 GB | $0.052/GB | $0.052 |
+| Data Processing | 1 GB | $0.052/GB | $0.052 |
 | **Total cost per cycle** | | | **$0.109** |
 
 **Cost Analysis of the Disposable NAT instance Solution:**  
@@ -44,7 +44,7 @@ This solution is ideal for developers and teams who need outbound internet acces
 | Lambda | 2 invocations, 128MB, 2 min each | $0.20 per 1M requests | within always free plan | 
 | EventBridge | 2 scheduled events | $1 per 1M invocations | within always free plan |
 | EIP | 1 hour | $0.005/hour | $0.005 |
-| Data Transfer/Processing | 1 GB | $0.09/GB | $0.09 |
+| Data Transfer | 1 GB | $0.09/GB | $0.09 |
 | **Total cost per cycle** | | | **$0.1084** |
 
 Notes:
