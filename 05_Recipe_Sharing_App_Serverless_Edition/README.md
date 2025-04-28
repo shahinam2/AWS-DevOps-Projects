@@ -16,6 +16,26 @@ Create a serverless version of the recipe sharing app using AWS Lambda and API G
 | Database        | - DynamoDB                                                                                                   |
 | CI/CD Pipeline  | - GitHub Actions<br>- AWS CloudFormation                                                                     |
 
+### Cost Analysis
+This pricing analysis provides a rough estimate and may vary significantly based on actual usage patterns, such as cache efficiency, payload sizes, and the number of active users.
+**Example:** If you have 1 million requests per month, the **estimated cost** would be: 
+| Service                                  | Cost                                                                |
+|------------------------------------------|---------------------------------------------------------------------|
+| API Gateway (HTTP API + Data Transfer)   | $1.20 (free for the first 12 months)                                |
+| Lambda                                   | $0.20 (free for the first 12 months)                                |
+| DynamoDB (On-demand)                     | $1.30 (free for the first 12 months)                                |
+| S3 (1.55MB Storage)                      | $0.00003709 (free for the first 12 months)                          |     
+| CloudFront (1,513.67 GB transfer)        | $128.66 (free for the first 12 months)                              |
+| Cognito                                  | $14,850 (free tier of 10,000 monthly active users (MAU) per month)  | 
+| **Total**                                | **~$14,981.37**                                                     | 
+
+**Assumptions:**
+- Each request results in approximately 1.55 MB of data being transferred.
+- Low CloudFront cache hit ratio (worst-case scenario).
+- All 1 million users log in at least once per month (counted as MAU for Cognito).
+- Pricing is based on EU-Central-1 region.
+- All costs are assumed to be outside of the free tier.
+
 ### Pre-requisites:
 - You must configure your AWS credentials in your GitHub repository. This can be done by creating a new secret in your GitHub repository settings. The secret should contain the following keys:
   - `AWS_ACCESS_KEY_ID`
