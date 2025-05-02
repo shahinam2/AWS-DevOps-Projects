@@ -13,6 +13,7 @@ I'm passionate about building production-ready solutions and continuously improv
 | Email Database Application             | - Python<br> - Flask<br> - Gunicorn<br> - Boto3<br> - AWS Secret Manager<br> - Bash                                                                               | Intermediate       | Demo-Only           | CF   | No                                | <a href="https://github.com/shahinam2/AWS-DevOps-Projects/tree/main/03_Email_Database">Go To Project</a>                           |
 | Roman Numerals Converter Application   | - Python<br> - Flask<br> - EC2<br> - Nginx                                                                                                                        | Beginner           | Demo-Only           | CF   | No                                | <a href="https://github.com/shahinam2/AWS-DevOps-Projects/tree/main/02_Roman_Numerals_Converter_Application">Go To Project</a>     |
 | Random Carousel Static Website         | - EC2<br> - Apache Web Server<br> - Static HTML                                                                                                                   | Beginner           | Demo-Only           | CF   | No                                | <a href="https://github.com/shahinam2/AWS-DevOps-Projects/tree/main/01_Random_Carousel_Static_Website">Go To Project</a>           |
+
 Abbreviations:
 - CF = CloudFormation
 - IaC = Infrastructure as Code
