@@ -28,7 +28,7 @@ jobs:
                 terraform_version: "1.11.4"
   
             - run: terraform init
-              working-directory: ${GITHUB_WORKSPACE}/07_Linkedin_Profile_Picture_Analyzer/infrastructure
+              working-directory: 07_Linkedin_Profile_Picture_Analyzer/infrastructure
   
             - name: Terraform fmt
               id: fmt
@@ -46,4 +46,4 @@ jobs:
             - name: Terraform Apply (only on main)
               if: github.ref == 'refs/heads/main'
               run: terraform apply -auto-approve tfplan
-              working-directory: ${GITHUB_WORKSPACE}/07_Linkedin_Profile_Picture_Analyzer/infrastructure
+              working-directory: 07_Linkedin_Profile_Picture_Analyzer/infrastructure
