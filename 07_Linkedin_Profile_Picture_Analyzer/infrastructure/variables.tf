@@ -3,3 +3,4 @@ variable "JWKS_URL" {
   type        = string
   default     = "https://improved-buffalo-76.clerk.accounts.dev"
 }
+ 
