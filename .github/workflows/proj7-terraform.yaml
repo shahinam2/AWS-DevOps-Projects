@@ -1,4 +1,4 @@
-name: Deplo Deploy Linkedin profile picture analyzerT Infrastructure via Terraform
+name: Deploy Linkedin profile picture analyzerT Infrastructure via Terraform
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
               run: terraform validate -no-color
 
             - name: Terraform Plan
-              working-directory: infra
+              working-directory: infrastructure
               run: terraform plan -out=tfplan
       
             - name: Terraform Apply (only on main)
