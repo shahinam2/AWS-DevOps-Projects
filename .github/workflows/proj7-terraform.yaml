@@ -3,7 +3,7 @@ name: Deploy Linkedin profile picture analyzerT Infrastructure via Terraform
 on:
   push:
     paths:
-        - 'infrastructure/**'
+        - '07_Linkedin_Profile_Picture_Analyzer/infrastructure/**'
     branches:
         - main
 
