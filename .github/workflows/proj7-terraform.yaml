@@ -40,7 +40,7 @@ jobs:
               run: terraform validate -no-color
 
             - name: Terraform Plan
-              working-directory: infrastructure
+              working-directory: 07_Linkedin_Profile_Picture_Analyzer/infrastructure
               run: terraform plan -out=tfplan
       
             - name: Terraform Apply (only on main)
