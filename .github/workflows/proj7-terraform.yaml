@@ -1,4 +1,4 @@
-name: Terraform Infrastructure
+name: Deplo Deploy Linkedin profile picture analyzerT Infrastructure via Terraform
 
 on:
   push:
