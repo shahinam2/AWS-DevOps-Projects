@@ -1,0 +1,49 @@
+name: Terraform Infrastructure
+
+on:
+  push:
+    paths:
+        - 'infrastructure/**'
+    branches:
+        - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+    
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4.2.2
+
+            - name: Set up AWS CLI
+              uses: aws-actions/configure-aws-credentials@v4.1.0
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ secrets.AWS_REGION }}
+          
+            - name: HashiCorp - Setup Terraform
+              uses: hashicorp/setup-terraform@v3.1.2
+              with:
+                terraform_version: "1.11.4"
+  
+            - run: terraform init
+              working-directory: infrastructure
+  
+            - name: Terraform fmt
+              id: fmt
+              run: terraform fmt -check
+              continue-on-error: true
+  
+            - name: Terraform Validate
+              id: validate
+              run: terraform validate -no-color
+
+            - name: Terraform Plan
+              working-directory: infra
+              run: terraform plan -out=tfplan
+      
+            - name: Terraform Apply (only on main)
+              if: github.ref == 'refs/heads/main'
+              run: terraform apply -auto-approve tfplan
+              working-directory: infrastructure

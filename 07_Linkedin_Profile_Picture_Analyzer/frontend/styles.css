@@ -1,0 +1,117 @@
+body {
+    font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #f5f5f7;
+    color: #1d1d1f;
+}
+.container {
+    text-align: center;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    max-height: 100vh;
+    overflow-y: auto;
+    margin: 25px 25px;
+}
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1d1d1f;
+}
+p {
+    font-size: 1.1rem;
+    color: #6e6e73;
+}
+input[type="file"] {
+    margin: 20px 0;
+    padding: 12px;
+    border: 1px solid #d2d2d7;
+    border-radius: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+}
+input[type="file"]::file-selector-button {
+    background: #0071e3;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+input[type="file"]::file-selector-button:hover {
+    background: #2a6eb3;
+}
+button {
+    background: #28a745; /* Green for Analyze */
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+button:hover {
+    background: #218838; /* Darker green for hover */
+}
+button:nth-of-type(2) {
+    background: #dc3545; /* Red for Reset */
+}
+button:nth-of-type(2):hover {
+    background: #c82333; /* Darker red for hover */
+}
+button:active {
+    transform: scale(0.95); /* Simulates a press by slightly shrinking the button */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adds a pressed shadow effect */
+}
+.result {
+    margin-top: 30px;
+    text-align: left;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+ul {
+    padding-left: 20px;
+}
+ul li {
+    margin-bottom: 10px;
+}
+.thumb {
+    margin-right: 20px;
+    max-width: 160px;      /* adjust as you like */
+    max-height: 160px;
+    object-fit: cover;     /* crop without distortion */
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / .15);
+    /* display: block; */
+  }
+.logo {
+    max-width: 60%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+.upload-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
