@@ -17,3 +17,9 @@ output "api_gateway_base_url" {
   value       = aws_apigatewayv2_stage.dev_stage.invoke_url
   description = "The base URL for the API Gateway."
 }
+
+# Output the CloudFront distribution domain name 
+output "cloudfront_distribution_domain" {
+  description = "The domain name of the CloudFront distribution."
+  value       = aws_cloudfront_distribution.frontend_distribution.domain_name
+}

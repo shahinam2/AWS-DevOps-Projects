@@ -1,6 +1,11 @@
 # Provider configuration for AWS
 provider "aws" {
-  region = var.AWS_REGION
+  region = var.AWS_REGION # eu‑central‑1 – everything *except* WAF
+}
+
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1" # For configuring and associating WAF with Cloudfront (global)
 }
 
 # This configuration is used to store the Terraform remote state file in an S3 bucket

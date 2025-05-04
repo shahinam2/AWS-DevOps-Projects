@@ -11,11 +11,11 @@
     <div class="container">
         <div id="app"></div>
         <img src="./linkedin-profile-picture-analyzer-logo.png" alt="Logo" class="logo">
-        <p>Upload an image to analyze</p>
+        <p>Upload an image(.jpg or .png) to analyze</p>
         <div class="upload-container">
             <img id="preview" class="thumb" style="display:none;" />
             <div>
-                <input type="file" id="imageInput" accept="image/*">
+                <input type="file" id="imageInput" accept=".jpg, .png">
                 <button onclick="analyzeImage()">Analyze</button>
                 <button onclick="resetImage()">Reset</button>
             </div>
