@@ -2,12 +2,15 @@
 ############################# S3 Bucket for uploading Images #############################
 ##########################################################################################
 # Create random ID to use as a suffix for the S3 bucket name
-resource "random_id" "suffix" {
-  byte_length = 10
-}
+# resource "random_id" "suffix" {
+#   byte_length = 10
+# }
+
+# Get the AWS account ID to use in the bucket name
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "upload_bucket" {
-  bucket        = "profile-store-${random_id.suffix.hex}"
+  bucket        = "profile-store-${data.aws_caller_identity.current.account_id}"
   force_destroy = true
 }
 
@@ -86,41 +89,41 @@ resource "aws_s3_bucket_public_access_block" "frontend_access_block" {
 ###### Upload EVERYTHING (including the freshly‑generated config.json) ########
 ###############################################################################
 # MIME‑type helper map
-locals {
-  mime_types = {
-    html = "text/html"
-    css  = "text/css"
-    js   = "application/javascript"
-    jpg  = "image/jpeg"
-    jpeg = "image/jpeg"
-    png  = "image/png"
-    gif  = "image/gif"
-  }
-}
+# locals {
+#   mime_types = {
+#     html = "text/html"
+#     css  = "text/css"
+#     js   = "application/javascript"
+#     jpg  = "image/jpeg"
+#     jpeg = "image/jpeg"
+#     png  = "image/png"
+#     gif  = "image/gif"
+#   }
+# }
 
-resource "aws_s3_object" "frontend_files" {
-  for_each = fileset("../frontend", "**/*")
+# resource "aws_s3_object" "frontend_files" {
+#   for_each = fileset("../frontend", "**/*")
 
-  bucket = aws_s3_bucket.frontend_bucket.id
-  key    = each.value
-  source = "../frontend/${each.value}"
+#   bucket = aws_s3_bucket.frontend_bucket.id
+#   key    = each.value
+#   source = "../frontend/${each.value}"
 
-  # pick the mime‑type from the map, default to binary
-  content_type = lookup(
-    local.mime_types,
-    regex("[^.]*$", each.value), # grab the file extension
-    "application/octet-stream"
-  )
-}
+#   # pick the mime‑type from the map, default to binary
+#   content_type = lookup(
+#     local.mime_types,
+#     regex("[^.]*$", each.value), # grab the file extension
+#     "application/octet-stream"
+#   )
+# }
 
 ################################################################################
 ###################### upload the generated config #############################
 ################################################################################
-resource "aws_s3_object" "config_json" {
-  bucket       = aws_s3_bucket.frontend_bucket.id
-  key          = "config.json"
-  source       = local_file.frontend_config.filename
-  content_type = "application/json"
+# resource "aws_s3_object" "config_json" {
+#   bucket       = aws_s3_bucket.frontend_bucket.id
+#   key          = "config.json"
+#   source       = local_file.frontend_config.filename
+#   content_type = "application/json"
 
-  depends_on = [local_file.frontend_config] # make sure it’s written first
-}
+#   depends_on = [local_file.frontend_config] # make sure it’s written first
+# }

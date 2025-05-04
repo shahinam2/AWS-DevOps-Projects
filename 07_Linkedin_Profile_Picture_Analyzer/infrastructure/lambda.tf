@@ -86,11 +86,3 @@ resource "aws_lambda_function" "get_result_func" {
     }
   }
 }
-
-####################################################################################
-############################# Output S3 Bucket name ################################
-####################################################################################
-# Output for S3 bucket name
-output "upload_s3_bucket" {
-  value = aws_s3_bucket.upload_bucket.bucket
-}

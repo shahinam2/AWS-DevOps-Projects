@@ -98,20 +98,12 @@ resource "aws_apigatewayv2_authorizer" "clerk_authorizer" {
 ###############################################################################
 # Create config.json after the stage is ready
 ###############################################################################
-resource "local_file" "frontend_config" {
-  filename = "../frontend/config.json"
+# transferred this to the frontend workflow
+# resource "local_file" "frontend_config" {
+#   filename = "../frontend/config.json"
 
-  # jsonencode guarantees valid JSON
-  content = jsonencode({
-    base_url = aws_apigatewayv2_stage.dev_stage.invoke_url
-  })
-}
-
-##################################################################################
-############################# API Gateway Outputs ################################
-##################################################################################
-# Remove the unsupported data source and directly use the aws_apigatewayv2_stage resource
-output "base_url" {
-  value       = aws_apigatewayv2_stage.dev_stage.invoke_url
-  description = "The base URL for the API Gateway."
-}
+# jsonencode guarantees valid JSON
+#   content = jsonencode({
+#     base_url = aws_apigatewayv2_stage.dev_stage.invoke_url
+#   })
+# }

@@ -1,7 +1,15 @@
 name: Deploy Linkedin profile picture analyzer frontend
 
 on:
-  workflow_dispatch:
+  push:
+    paths:
+        - '07_Linkedin_Profile_Picture_Analyzer/frontend/**'
+    branches:
+        - main
+
+env:
+    Infrastructure_Path: 07_Linkedin_Profile_Picture_Analyzer/infrastructure
+    Frontend_Path: 07_Linkedin_Profile_Picture_Analyzer/frontend
 
 jobs:
     deploy:
@@ -17,3 +25,21 @@ jobs:
               aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
               aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
               aws-region: ${{ secrets.AWS_REGION }}
+          
+          - name: HashiCorp - Setup Terraform
+            uses: hashicorp/setup-terraform@v3.1.2
+            with:
+              terraform_version: "1.11.4"
+  
+          - name: Terraform Init and Get the API gateway Base URL
+            run: |
+              terraform init
+              API_GATEWAY_BASE_URL=$(terraform output api_gateway_base_url)
+              FRONTEND_BUCKET=$(terraform output frontend_bucket)
+            working-directory: ${{ env.Infrastructure_Path }}
+  
+          - name: Create config.json for frontend & Deploy to frontend bucket
+            run: |
+              echo '{"base_url":"'"${API_GATEWAY_BASE_URL}"'"}' > config.json
+              aws s3 sync . s3://${FRONTEND_BUCKET}/ 
+            working-directory: ${{ env.Frontend_Path }}

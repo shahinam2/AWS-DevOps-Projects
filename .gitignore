@@ -1,2 +1,5 @@
 node_modules/
 dist/
+.terraform/
+terraform.tfstate
+.terraform.lock.hcl
