@@ -14,6 +14,10 @@ env:
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ secrets.AWS_REGION }}
     
         steps:
           - name: Checkout repo
@@ -43,3 +47,11 @@ jobs:
               echo '{"base_url":"'"${API_GATEWAY_BASE_URL}"'"}' > config.json
               aws s3 sync . s3://${FRONTEND_BUCKET}/ 
             working-directory: ${{ env.Frontend_Path }}
+
+          - name: Invalidate CloudFront cache
+            run: |
+              echo "Getting CloudFront distribution ID..."
+              echo "CLOUDFRONT_DISTRIBUTION_ID=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_ENV
+              echo "Invalidating CloudFront cache..."
+              aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+            working-directory: ${{ env.Infrastructure_Path }}
