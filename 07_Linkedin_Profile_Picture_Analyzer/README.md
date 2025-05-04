@@ -1,15 +1,12 @@
 ### Architecture
 <img src="readme-files/LinkedinProfilePictureAnalyzer-Diagram.gif" alt="Linkedin Profile Picture Analyzer Architecture" width="1000"/>
+### Project Overview
+This project is a LinkedIn Profile Picture Analyzer that uses AWS services to analyze and process profile pictures. The application is designed to be serverless, scalable, and cost-effective. It leverages AWS Lambda, Amazon S3, Amazon Rekognition, and Amazon DynamoDB to provide a seamless experience for users.
 
 ---
 
 ### App Demo
 <img src="readme-files/app-demo.gif " alt="Linkedin Profile Picture Analyzer Demo" width="500"/>
-
----
-
-### Project Overview
-This project is a LinkedIn Profile Picture Analyzer that uses AWS services to analyze and process profile pictures. The application is designed to be serverless, scalable, and cost-effective. It leverages AWS Lambda, Amazon S3, Amazon Rekognition, and Amazon DynamoDB to provide a seamless experience for users.
 
 ---
 
