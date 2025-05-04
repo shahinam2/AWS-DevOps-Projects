@@ -34,8 +34,8 @@ jobs:
           - name: Terraform Init and Get the API gateway Base URL
             run: |
               terraform init
-              API_GATEWAY_BASE_URL=$(terraform output api_gateway_base_url)
-              FRONTEND_BUCKET=$(terraform output frontend_bucket)
+              echo "API_GATEWAY_BASE_URL=$(terraform output -raw api_gateway_base_url)" >> $GITHUB_ENV
+              echo "FRONTEND_BUCKET=$(terraform output -raw frontend_bucket)" >> $GITHUB_ENV
             working-directory: ${{ env.Infrastructure_Path }}
   
           - name: Create config.json for frontend & Deploy to frontend bucket
