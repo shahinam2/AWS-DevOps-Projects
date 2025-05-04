@@ -9,9 +9,3 @@ variable "AWS_REGION" {
   type        = string
   default     = "eu-central-1"
 }
-
-variable "Terraform_State_Bucket" {
-  description = "The name of the S3 bucket for Terraform state"
-  type        = string
-  default     = "terraform-state-bucket-593793041840"
-}
