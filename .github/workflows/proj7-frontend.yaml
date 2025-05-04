@@ -1,11 +1,13 @@
 name: Deploy Linkedin profile picture analyzer frontend
 
 on:
-  push:
-    paths:
-        - '07_Linkedin_Profile_Picture_Analyzer/frontend/**'
-    branches:
-        - main
+  workflow_dispatch:
+  # Uncomment the following lines to trigger on push to main branch and on changes to the frontend directory
+  # push:
+  #   paths:
+  #       - '07_Linkedin_Profile_Picture_Analyzer/frontend/**'
+  #   branches:
+  #       - main
 
 env:
     Infrastructure_Path: 07_Linkedin_Profile_Picture_Analyzer/infrastructure

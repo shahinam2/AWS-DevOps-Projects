@@ -42,6 +42,18 @@ resource "aws_wafv2_web_acl" "cloudfront_waf" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        # Add rule_action_override here
+        # The AWSManagedRulesCommonRuleSet contains a rule called SizeRestrictions_QUERYSTRING. 
+        # It blocks any query string longer than 2,048 bytes. 
+        # The Clerk JWT + handshake query easily exceeds that limit, so WAF returns a 403.
+        # This rule_action_override allows the request to pass through.
+        rule_action_override {
+          name = "SizeRestrictions_QUERYSTRING"
+          action_to_use {
+            count {}
+          }
+        }
       }
     }
     visibility_config {
