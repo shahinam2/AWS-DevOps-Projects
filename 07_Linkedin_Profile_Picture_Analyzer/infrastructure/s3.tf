@@ -44,7 +44,7 @@ data "aws_iam_policy_document" "lambda_s3_access" {
 ##########################################################################################
 # Create frontend S3 bucket with a unique name using random ID
 resource "aws_s3_bucket" "frontend_bucket" {
-  bucket        = "profile-store-frontend-${random_id.suffix.hex}"
+  bucket        = "profile-store-frontend-${data.aws_caller_identity.current.account_id}"
   force_destroy = true
 }
 
