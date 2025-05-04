@@ -18,3 +18,4 @@ Abbreviations:
 - CF = CloudFormation
 - IaC = Infrastructure as Code
 - CI/CD = Continuous Integration/Continuous Deployment
+- Prod. = Production
