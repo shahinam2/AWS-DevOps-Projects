@@ -79,8 +79,23 @@ So, when you make a change to your frontend code, you don't have to wait for the
 ---
 
 ### Cost Analysis
+The following is a cost analysis of 1 million users that each upload 10 images per month. 
 
+You can find the pricing details here: 
+https://calculator.aws/#/estimate?id=b35b930a37c20174a67a7625601a25a706277799
 
+The total: 
+- AWS Services Cost $8,882.36
+- Clerk Authentication Cost $19,825 
+- Total: **$28,707.36 per month**  
+
+Notes:
+- You can save $16,875 per month by using Supabase instead of Clerk.
+- The project is deployed in the `eu-central-1` region.
+- Public SSL/TLS certificates provisioned through AWS Certificate Manager (ACM) are free.
+- This cost analysis assumes that the project owner does not have any free tier credits left.
+- The cost is calculated based on the AWS pricing as of May 2025. 
+- The actual cost may vary based on the region and usage.
 
 ---
 
