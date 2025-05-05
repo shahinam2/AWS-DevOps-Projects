@@ -7,7 +7,7 @@ This project is a LinkedIn Profile Picture Analyzer that uses AWS services to an
 
 ---
 
-### Projects Architecture & Flows
+### Project Architecture & Flows
 In the following flow diagrams you can see the flow of different components of the project.
 
 **Frontend Architecture:**  
