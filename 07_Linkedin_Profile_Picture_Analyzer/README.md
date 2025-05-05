@@ -7,6 +7,23 @@ This project is a LinkedIn Profile Picture Analyzer that uses AWS services to an
 
 ---
 
+### Projects Architecture & Flows
+In the following flow diagrams you can see the flow of different components of the project.
+
+**Frontend Architecture:**  
+
+<img src="readme-files/frontend-architecture.png" alt="Frontend Architecture" width="1000"/>
+
+**Authentication Flow:**
+
+<img src="readme-files/authentication-flow.png" alt="Authentication Flow" width="1000"/>
+
+**Backend Flow: Image processing**
+
+<img src="readme-files/image-processing-flow.png" alt="image processing Flow" width="1000"/>
+
+---
+
 ### App Demo
 <img src="readme-files/app-demo.gif " alt="Linkedin Profile Picture Analyzer Demo" width="500"/>
 
