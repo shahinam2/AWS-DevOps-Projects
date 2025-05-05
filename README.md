@@ -4,6 +4,8 @@ This repository is a collection of AWS and DevOps projects I've built to demonst
 
 I'm passionate about building production-ready solutions and continuously improving my skill set in areas like Kubernetes, Terraform, CloudFormation, AWS Lambda, and Docker.
 
+> For diving deeper into each project and have a better understanding of the architecture, please have a look at the DeepWiki of my repo: https://deepwiki.com/shahinam2/AWS-DevOps-Projects
+
 | Project Name                           | Stack/Services                                                                                                                                                    | Difficulty Level   | Prod. Ready?        | IaC       | CI/CD?                            | Link to Project Folder                                                                                                             |
 |----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|---------------------|-----------|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
 | Linkedin Profile Picture Analyzer      | - Lambda<br> - API Gateway<br> - AWS Rekognition<br> - SQS<br> - DynamoDB<br> - Route53<br> - WAF<br> - Cloudfront<br> - ACM<br> - Clerk                          | Advanced           | *No                  | Terraform | Yes - GitHub Actions              | <a href="https://github.com/shahinam2/AWS-DevOps-Projects/tree/main/07_Linkedin_Profile_Picture_Analyzer">Go To Project</a>        |
