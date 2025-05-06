@@ -64,7 +64,8 @@ After signing up and creating a new application, make sure that you create a JWT
 4. Run `terraform init` to initialize the Terraform configuration
 5. Run `terraform plan` to see the resources that will be created
 6. Run `terraform apply` to create the resources
-This creates the infrastructure for the application. The infrastructure includes:
+This creates the infrastructure for the application. 
+The infrastructure includes:
   - API Gateway
   - Lambda Functions
   - DynamoDB Table
@@ -72,8 +73,10 @@ This creates the infrastructure for the application. The infrastructure includes
   - CloudFront Distribution
   - Route 53 Hosted Zone
   - WAF
-But for the frontend, you should add a slight change to the `index.html` file and push it. that will trigger the GitHub Actions workflow and deploy the frontend to S3.
-This project is created in a way that you can deploy the backend and frontend separately. The backend is deployed using Terraform and the frontend is deployed using GitHub Actions.
+
+For the frontend, you should add a slight change to the `index.html` file and push it. That will trigger the GitHub Actions workflow and deploy the frontend to S3.  
+This project is created in a way that you can deploy the backend and frontend separately.  
+Backend has its own GitHub Actions workflow and frontend also has its own GitHub Actions workflow separately.  
 So, when you make a change to your frontend code, you don't have to wait for the backend to be deployed again. You can just push the changes to the `main` branch and the GitHub Actions workflow will take care of the rest.
 
 ---
@@ -81,15 +84,12 @@ So, when you make a change to your frontend code, you don't have to wait for the
 ### Cost Analysis
 The following is a cost analysis of 1 million users that each upload 10 images per month. 
 
-You can find the pricing details here: 
-https://calculator.aws/#/estimate?id=b35b930a37c20174a67a7625601a25a706277799
-
-The total: 
-- AWS Services Cost $8,882.36
-- Clerk Authentication Cost $19,825 
-- Total: **$28,707.36 per month**  
+AWS services: $8,882.36  
+Clerk authentication: $19,825  
+Total: **$28,707.36 per month**  
 
 Notes:
+- You can have a look at AWS services cost details <a href="https://calculator.aws/#/estimate?id=b35b930a37c20174a67a7625601a25a706277799">here</a>.
 - You can save $16,875 per month by using Supabase instead of Clerk.
 - The project is deployed in the `eu-central-1` region.
 - Public SSL/TLS certificates provisioned through AWS Certificate Manager (ACM) are free.
