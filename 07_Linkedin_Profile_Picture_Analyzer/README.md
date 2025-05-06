@@ -51,8 +51,10 @@ In the following flow diagrams you can see the flow of different components of t
   - ACM_CERTIFICATE_ARN -> The ARN of the ACM certificate for your domain. You can create a new certificate in the AWS Certificate Manager. Make sure to create the certificate in us-east-1 region.
   - HOSTED_ZONE_NAME -> The name of the hosted zone for your domain. You can create a new hosted zone in AWS Route 53 or use an existing one.
   SUBDOMAIN -> In this project, I used a subdomain, but you can use the root domain as well.
-- Clerk Account
+  - Clerk Account  
+
 After signing up and creating a new application, make sure that you create a JWT template like this:  
+
 <img src="readme-files/json-template.png" alt="Clerk JWT Template" width="500"/>
 
 ---
