@@ -33,7 +33,7 @@ In short: commit → pipeline translates & ships → CloudFront + Lambda@Edge se
 ### Project Demo
 <img src="readme-files/app-demo.gif" alt="Polyglot Pipeline Demo" width="1000"/>
 
-**This Demo has 2 parts:**
+**This demo has 2 parts:**
 1. Showing the effect of the Lambda@Edge function when no cookie is set.
    - For each language to show the effect, I remove the cookie and try to access the main page.
 2. Showing the effect of the Lambda@Edge function when a cookie is set using the language picker.
@@ -140,6 +140,16 @@ Put simply, this Lambda@Edge acts as a lightweight traffic director: one cookie,
    terraform plan  # Optional: Review the plan before applying
    terraform apply
    ```
+4.1 On first run, you should manually establish a connection between AWS CodePipeline and GitHub. for this, you should go to AWS Console > Developer Tools > Under Settings > Connections and finish creating your connection by clicking on the "Update pending connection" button as shown below:  
+<img src="readme-files/codestar-connection.png" alt="CodeStar Connection" width="600"/>  
+
+4.2 After that, you should click on "Install a new app" button and select the GitHub repository you want to connect with AWS CodePipeline. This will allow AWS CodePipeline to access your GitHub repository and trigger the pipeline on code changes.  
+<img src="readme-files/codestar-install-app.png" alt="CodeStar Install App" width="600"/>  
+
+4.3 After that, you should click on "Authorize AWS CodeStar Connections" button to authorize the connection between AWS CodeStar and your GitHub repository and at this point, you should be able to see the connection status as "available" in the AWS Console.  
+<img src="readme-files/codestar-status-available.png" alt="CodeStar Status Available" width="600"/>  
+
+4.4 After that, you should go to AWS Console > CodePipeline > Pipelines and select the pipeline you created in the previous step. You should see a "Release change" button on the top right corner of the page. Click on it to trigger the pipeline manually (for first and last time!).  
 5. Once the deployment is complete, the website will be accessible at the specified domain.
 
 ---
