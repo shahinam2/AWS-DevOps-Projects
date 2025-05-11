@@ -1,8 +1,30 @@
 Project 3: Email Database
 ========================
 
+### Table of Contents
+- [Project Diagram](#project-diagram)
+- [Project Goal](#project-goal)
+- [App Demo](#app-demo)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [CloudFormation Template Explanation](#cloudformation-template-explanation)
+- [Prerequisites](#prerequisites)
+- [Deployment Steps](#deployment-steps)
+
+---
+
+### Project Diagram
+<img src="./readme-files/EmailDB.gif" alt="Project Diagram" width="600"/>
+
 ### Project Goal
 The goal of this project is to automate the deployment of a Flask application on AWS using CloudFormation. The application is a simple email database that allows users to add and retrieve email addresses. The application uses AWS RDS for the database and AWS Secret Manager for storing the database credentials.
+
+---
+
+### App Demo
+<img src="./readme-files/appdemo.gif" alt="App Demo" width="600"/>
+
+---
 
 ### Tech Stack
 - Python Flask -> Web framework
@@ -12,11 +34,7 @@ The goal of this project is to automate the deployment of a Flask application on
 - Gunicorn -> WSGI HTTP server for UNIX
 - Bash -> Used as a glue to bring everything together
 
-### Project Diagram
-<img src="./readme-files/EmailDB.gif" alt="Project Diagram" width="600"/>
-
-### App Demo
-<img src="./readme-files/appdemo.gif" alt="App Demo" width="600"/>
+---
 
 ### Project Structure
 ```bash
@@ -50,6 +68,8 @@ Explanation of the files:
   - `db-conn-test.py`: A test file that checks the database connection.
   - `fetch-secret-test.py`: A test file that checks the retrieval of secrets from AWS Secret Manager.
 
+---
+
 ### CloudFormation Template Explanation
 The CloudFormation template is divided into several sections:
 - **Parameters**: This section defines the parameters that can be passed to the template when creating the stack. It includes parameters for the Database name, Database Username, Allocated storage for DB, DB Instance type, key pair name, EC2 security group, and EC2 instance type.
@@ -64,12 +84,16 @@ The CloudFormation template is divided into several sections:
     - DB Password is stored in AWS Secret Manager.
 - **Outputs**: This section defines the outputs of the stack, including the URL of the website and DB Endpoint.
 
+---
+
 ### Prerequisites
 - AWS CLI installed and configured with appropriate permissions.
 - An existing key pair in the AWS region where the stack will be deployed. make sure to replace the shahin-key parameter in the CloudFormation template with the name of your key pair.
 - An existing security group in the AWS region where the stack will be deployed that allows ports 80 and 22.
 - Make sure to change the region in the AWS CLI commands to the region where you want to deploy the stack.
 - SSM parameter /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 available for the latest Amazon Linux 2 AMI.
+
+---
 
 ### Deployment Steps
 1. **Create the CloudFormation Stack**

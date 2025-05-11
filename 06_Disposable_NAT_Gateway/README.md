@@ -1,3 +1,6 @@
+Project 6: Disposable NAT Gateway
+=================================
+
 ### Table of Contents
 - [Architecture](#architecture)
 - [Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking](#project-overview-disposable-nat-gateway-for-cost-effective-and-secure-aws-networking)

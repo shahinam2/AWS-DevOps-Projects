@@ -1,12 +1,28 @@
-# Project 2: Roman Numerals Converter Application
+Project 2: Roman Numerals Converter Application
+===============================================
 
+### Table of Contents
+- [Project Architecture](#project-architecture)
+- [App Demo](#app-demo)
+- [What it does](#what-it-does)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Deployment Steps](#deployment-steps)
+- [A note about app.py debugging](#a-note-about-apppy-debugging)
+- [About setup-with-pip.sh vs. setup-with-uv.sh](#about-setup-with-pipsh-vs-setup-with-uvsh)
+
+---
+
+### Project Architecture:
+<img src="./readme-files/RomanNumeralsConverterDiagram.gif" width="500" height="auto" />
 This project showcases how to automate the deployment of a Flask-based Roman Numeral Converter application on an AWS EC2 instance using AWS CloudFormation. The app is served using Gunicorn as the WSGI server and is fronted by Nginx acting as a reverse proxy. The entire infrastructure — including instance provisioning, package installation, and service configuration — is managed through a single CloudFormation template for seamless reproducibility and scalability.
 
-**Project Diagram:**  
-<img src="./readme-files/RomanNumeralsConverterDiagram.gif" width="500" height="auto" />
+---
 
-**App Demo:**  
+### App Demo:
 <img src="./readme-files/AppDemo.gif" width="500" height="auto" />
+
+---
 
 ### What it does:
 - Creates an EC2 instance with:  
@@ -31,6 +47,8 @@ This project showcases how to automate the deployment of a Flask-based Roman Num
 
 >🔐 Note: SSH access is open to the world (0.0.0.0/0). Restrict in production.
 
+---
+
 ### Project Structure
 ```
 ├── app.py
@@ -54,11 +72,15 @@ Explanation of the files:
 - `static/`: Directory containing static files (e.g., images).
 - `templates/`: Jinja2 HTML templates – Used by Flask to render the frontend. index.html is the main input form, and result.html displays the conversion result.
 
+---
+
 ### Prerequisites
 - AWS CLI installed and configured with appropriate permissions.
 - An existing key pair in the AWS region where the stack will be deployed. make sure to replace the `shahin-key` parameter in the CloudFormation template with the name of your key pair.
 - Make sure to change the region in the AWS CLI commands to the region where you want to deploy the stack.
 - SSM parameter `/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64` available for the latest Amazon Linux 2 AMI.
+
+---
 
 ### Deployment Steps
 1. **Create the CloudFormation Stack**
@@ -91,8 +113,12 @@ Explanation of the files:
    aws cloudformation delete-stack --stack-name my-stack --region <your-region>
    ```
 
+---
+
 ### A note about app.py debugging
 The debug is set to `True` for testing purposes. In production, it should be set to `False` to avoid exposing sensitive information in case of errors.
+
+---
 
 ### About setup-with-pip.sh vs. setup-with-uv.sh
 Both scripts serve the same purpose: setting up the Python environment and installing the required dependencies. The key difference lies in how the dependencies are installed:

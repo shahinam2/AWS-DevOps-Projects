@@ -1,3 +1,6 @@
+Project 8: Polyglot Pipeline
+=============================
+
 ### Table of Contents
 - [Architecture](#architecture)
 - [Project Overview](#project-overview)

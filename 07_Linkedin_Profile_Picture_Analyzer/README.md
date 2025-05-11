@@ -1,3 +1,6 @@
+Project 7: LinkedIn Profile Picture Analyzer
+=============================
+
 ### Table of Contents
 - [Architecture](#architecture)
 - [Project Overview](#project-overview)

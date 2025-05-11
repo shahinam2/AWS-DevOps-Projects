@@ -1,3 +1,6 @@
+Project 5: Recipe Sharing App: Serverless Edition
+=============================
+
 ### Table of Contents
 - [Project Goal](#project-goal)
 - [Architecture](#architecture)
