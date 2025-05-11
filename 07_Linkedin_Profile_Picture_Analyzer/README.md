@@ -1,3 +1,14 @@
+### Table of Contents
+- [Architecture](#architecture)
+- [Project Overview](#project-overview)
+- [Project Architecture & Flows](#project-architecture--flows)
+- [App Demo](#app-demo)
+- [Used Services](#used-services)
+- [Pre-requisites](#pre-requisites)
+- [How to Deploy](#how-to-deploy)
+- [Cost Analysis](#cost-analysis)
+- [Notes](#notes)
+
 ### Architecture
 <img src="readme-files/LinkedinProfilePictureAnalyzer-Diagram.gif" alt="Linkedin Profile Picture Analyzer Architecture" width="1000"/>  
 
