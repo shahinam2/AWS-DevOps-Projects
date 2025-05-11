@@ -1,3 +1,16 @@
+### Table of Contents
+### Table of Contents
+
+- [Architecture](#architecture)
+- [Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking](#project-overview-disposable-nat-gateway-for-cost-effective-and-secure-aws-networking)
+- [Cost Analysis](#cost-analysis)
+- [Used Services](#used-services)
+- [Pre-requisites](#pre-requisites)
+- [How to deploy](#how-to-deploy)
+- [Cron schedule expression cheatsheet](#cron-schedule-expression-cheatsheet)
+- [Further Work & Optimisation](#further-work--optimisation)
+- [Notes](#notes)
+
 ### Architecture
 <img src="readme-files/Disposable-NAT-GW-Diagram.gif" alt="Disposable NAT Gateway Architecture" width="1000"/>
 
@@ -82,6 +95,8 @@ Although the price of the NAT Gateway is generally higher than that of a NAT Ins
 - CloudFormation
    - The entire solution is deployed using a CloudFormation template, which automates the creation of the necessary resources.
 
+---
+
 ### Pre-requisites:
 There are 4 parameters that you should provide to the cloudformation template:
 1. **PublicSubnet:** The ID of the public subnet where the NAT Gateway will be created.
@@ -92,7 +107,7 @@ There are 4 parameters that you should provide to the cloudformation template:
 4. **DeleteNATGWScheduleExpression:** A cron schedule expression for deleting the NAT Gateway.
    - Same as above, but for deleting the NAT Gateway.
 
-### How to deploy the solution:
+### How to deploy:
 Fetch the cloudformation template & its parameters file from this repository:
 ```bash
 wget https://raw.githubusercontent.com/shahinam2/AWS-DevOps-Projects/refs/heads/main/06_Disposable_NAT_Gateway/CFN-Template.yaml
