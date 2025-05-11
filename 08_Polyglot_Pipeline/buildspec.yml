@@ -1,0 +1,31 @@
+version: 0.2
+
+env:
+  variables:
+    CLOUDFRONT_DISTRIBUTION_ID: "YOUR_DISTRIBUTION_ID"
+    WEBSITE_BUCKET_NAME: "YOUR-WEBSITE-BUCKET-NAME"
+
+phases:
+  build:
+    commands:
+      - ls  # for debugging purposes
+
+      # Translate en language to other languages and copy them to their respective directories  
+      - |
+        for lang in en es zh ar hi fr; do
+          if [ "$lang" = "en" ]; then
+            for file in index.html index.css script.js; do
+              aws s3 cp $file s3://$WEBSITE_BUCKET_NAME/$file
+            done
+          fi
+          if [ "$lang" != "en" ]; then
+            python translate.py en $lang index.html
+            aws s3 cp $lang-index.html s3://$WEBSITE_BUCKET_NAME/$lang/index.html
+            aws s3 cp index.css s3://$WEBSITE_BUCKET_NAME/$lang/index.css
+            aws s3 cp script.js s3://$WEBSITE_BUCKET_NAME/$lang/script.js
+          fi
+        done
+
+      # Invalidate everything in the CloudFront distribution
+      - |
+        aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
