@@ -1,12 +1,30 @@
+### Table of Contents
+- [Project Goal](#project-goal)
+- [Architecture](#architecture)
+- [App Demo](#app-demo)
+- [Used Services](#used-services)
+- [Cost Analysis](#cost-analysis)
+- [Pre-requisites](#pre-requisites)
+- [About CI/CD Pipeline](#about-cicd-pipeline)
+- [Further Work & Optimisation](#further-work--optimisation)
+- [Notes](#notes)
+
+---
 
 ### Project Goal
 Create a serverless version of the recipe sharing app using AWS Lambda and API Gateway and deploy it using a GitHub Actions CI/CD pipeline with AWS CloudFormation.
 
+---
+
 ### Architecture
 <img src="readme-files/Architecture-Diagram.gif" alt="Architecture" width="900"/>
 
+---
+
 ### App Demo
 <img src="readme-files/appdemo.gif" alt="App-Demo" width="800"/>
+
+---
 
 ### Used Services 
 | Components      | Services                                                                                                     |
@@ -15,6 +33,8 @@ Create a serverless version of the recipe sharing app using AWS Lambda and API G
 | Backend         | - 1 API Gateway<br>- 5 API Endpoints<br>- 5 Lambda Functions<br>- Amazon Cognito                             |
 | Database        | - DynamoDB                                                                                                   |
 | CI/CD Pipeline  | - GitHub Actions<br>- AWS CloudFormation                                                                     |
+
+---
 
 ### Cost Analysis
 This pricing analysis provides a rough estimate and may vary significantly based on actual usage patterns, such as cache efficiency, payload sizes, and the number of active users.
@@ -35,6 +55,8 @@ This pricing analysis provides a rough estimate and may vary significantly based
 - All 1 million users log in at least once per month (counted as MAU for Cognito).
 - Pricing is based on EU-Central-1 region.
 - All costs are assumed to be outside of the free tier.
+
+---
 
 ### Pre-requisites:
 - You must configure your AWS credentials in your GitHub repository. This can be done by creating a new secret in your GitHub repository settings. The secret should contain the following keys:
@@ -59,6 +81,8 @@ Example of lambda layer definition in the cloudformation template:
           - !Sub arn:aws:lambda:${AWS::Region}:017000801446:layer:AWSLambdaPowertoolsPythonV2:68   
   ```
 
+---
+
 ### About CI/CD Pipeline
 Here are the steps that the pipeline performs:
 1. The pipeline checks out the code from the GitHub repository.
@@ -72,6 +96,8 @@ Here are the steps that the pipeline performs:
 Notes:
 - The CI/CD pipeline configuration file is [here](https://github.com/shahinam2/AWS-DevOps-Projects/blob/main/05_Recipe_Sharing_App_Serverless_Edition/CICD/deploy.yml).  
 - You can view a successful CI/CD pipeline run on GitHub Actions [here](https://github.com/shahinam2/AWS-DevOps-Projects/actions/runs/14596128230/job/40942369012)
+
+---
 
 ### Further Work & Optimisation
 - Optimise how lambda functions are zipped and deployed. For example, only deploy the functions that have changed.
