@@ -12,6 +12,8 @@ Project 7: LinkedIn Profile Picture Analyzer
 - [Cost Analysis](#cost-analysis)
 - [Notes](#notes)
 
+---
+
 ### Architecture
 <img src="readme-files/LinkedinProfilePictureAnalyzer-Diagram.gif" alt="Linkedin Profile Picture Analyzer Architecture" width="1000"/>  
 
