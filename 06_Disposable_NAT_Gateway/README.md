@@ -1,6 +1,4 @@
 ### Table of Contents
-### Table of Contents
-
 - [Architecture](#architecture)
 - [Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking](#project-overview-disposable-nat-gateway-for-cost-effective-and-secure-aws-networking)
 - [Cost Analysis](#cost-analysis)
