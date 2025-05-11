@@ -13,8 +13,6 @@ Developers never touch the AWS console. All the plumbing—buckets, policies, Cl
 
 In short: commit → pipeline translates & ships → CloudFront + Lambda@Edge serve language‑aware pages at global speed, all scripted with Terraform so we can tear it down or spin it up with one command.
 
-### Project Architecture & Flows
-
 ---
 
 ### App Demo
@@ -146,4 +144,5 @@ Details:
 ---
 
 ### Notes
-
+- The project is open source and licensed under the MIT License. Feel free to use, modify, and distribute the code as you see fit.
+- Contributions are welcome! If you have any suggestions or improvements, please create a pull request or open an issue.
