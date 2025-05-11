@@ -1,14 +1,29 @@
 Project 4: Recipe Sharing App
 =============================
 
-### Project Goal
-The goal of this project is to deploy a recipe sharing application made by fastapi using AWS services. The application will allow users to share their favorite recipes and view recipes shared by others. The project will be deployed using AWS CloudFormation, which will automate the deployment process and ensure that all resources are created in a consistent manner.
+### Table of Contents
+- [Project Architecture](#project-architecture)
+- [Project Goal](#project-goal)
+- [App Demo](#app-demo)
+- [Resources created by the CloudFormation stack](#resources-created-by-the-cloudformation-stack)
+- [Pre-requisites](#pre-requisites)
+- [Deployment](#deployment)
+- [Notes](#notes)
+
+---
 
 ### Project Architecture
 <img src="readme-files/recipe-sharing-app-diagram.gif" alt="Architecture-Diagram" width="800"/>
 
+### Project Goal
+The goal of this project is to deploy a recipe sharing application made by fastapi using AWS services. The application will allow users to share their favorite recipes and view recipes shared by others. The project will be deployed using AWS CloudFormation, which will automate the deployment process and ensure that all resources are created in a consistent manner.
+
+---
+
 ### App Demo
 <img src="readme-files/app-demo.gif" alt="App-Demo" width="800"/>
+
+---
 
 ### Resources created by the CloudFormation stack:
 | Component   | Services / Resources                                                                                         |
@@ -17,6 +32,8 @@ The goal of this project is to deploy a recipe sharing application made by fasta
 | Backend     | - 1 VPC<br>- 2 public subnets<br>- 2 private subnets<br>- 1 NAT gateway<br>- 1 ALB<br>- 1 Auto Scaling group |
 | Database    | - DynamoDB                                                                                                   |
 | Other Services | - Route 53<br>- CloudWatch<br>- AWS Certificate Manager<br>                                               |
+
+---
 
 ### Pre-requisites:
 - You must have a domain name registered with a domain registrar. This can be done through AWS Route 53 or any other registrar but AWS Route 53 is recommended for easier setup.
@@ -37,6 +54,7 @@ Example of ACM configuration for CloudFront:
 
 <img src="readme-files/acm-us.png" alt="ACM Config" width="600"/>
 
+---
 
 ### Deployment
 **Deploy using AWS Console:**  
@@ -107,6 +125,7 @@ Then update the Route53 records to correctly point to your CloudFront and ALB.
 Congratulations! You have successfully deployed the recipe sharing application using AWS CloudFormation. You can now access the application using the domain name you registered and configured in Route 53.
 
 ---
+
 ### Notes
 - This project is a demonstration of how to deploy a recipe sharing application using AWS services. It is not intended for production use and should be used for educational purposes only. The code and resources provided in this project are provided "as is" without warranty of any kind, either express or implied. **Use it at your own risk**.
 - To make the process of updating the app its better to implement a **CI/CD pipeline**.
