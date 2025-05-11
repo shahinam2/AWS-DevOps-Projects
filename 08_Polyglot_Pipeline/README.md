@@ -18,6 +18,10 @@ In short: commit → pipeline translates & ships → CloudFront + Lambda@Edge se
 ### App Demo
 <img src="readme-files/app-demo.gif" alt="Polyglot Pipeline Demo" width="1000"/>
 
+**This Demo has 2 parts:**
+1. Showing the effect of the Lambda@Edge function when no cookie is set.
+2. Showing the effect of the Lambda@Edge function when a cookie is set using the language picker.
+
 ---
 
 ### Lambda@Edge explained
