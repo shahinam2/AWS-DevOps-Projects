@@ -1,5 +1,20 @@
+### Table of Contents
+- [Architecture](#architecture)
+- [Project Overview](#project-overview)
+- [Project Demo](#project-demo)
+- [Lambda@Edge explained](#lambdaedge-explained)
+- [Used Services](#used-services)
+- [Pre-requisites](#pre-requisites)
+- [How to Deploy](#how-to-deploy)
+- [Cost Analysis](#cost-analysis)
+- [Notes](#notes)
+
+---
+
 ### Architecture
 <img src="readme-files/PolyglotPipeline-Architecture.gif" alt="Polyglot Pipeline Architecture" width="1000"/>
+
+---
 
 ### Project Overview 
 Think of this stack as a fully automated, multilingual static‑site machine.
@@ -15,7 +30,7 @@ In short: commit → pipeline translates & ships → CloudFront + Lambda@Edge se
 
 ---
 
-### App Demo
+### Project Demo
 <img src="readme-files/app-demo.gif" alt="Polyglot Pipeline Demo" width="1000"/>
 
 **This Demo has 2 parts:**
@@ -95,7 +110,7 @@ Put simply, this Lambda@Edge acts as a lightweight traffic director: one cookie,
 
 ---
 
-### Pre-requisites:
+### Pre-requisites
 - AWS account with necessary permissions to create and manage the required services.
 - GitHub account with a repository to host the application code.
 - Terraform installed on your local machine for infrastructure provisioning.
