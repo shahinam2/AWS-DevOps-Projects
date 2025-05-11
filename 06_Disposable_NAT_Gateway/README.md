@@ -9,8 +9,12 @@
 - [Further Work & Optimisation](#further-work--optimisation)
 - [Notes](#notes)
 
+---
+
 ### Architecture
 <img src="readme-files/Disposable-NAT-GW-Diagram.gif" alt="Disposable NAT Gateway Architecture" width="1000"/>
+
+---
 
 ### Project Overview: Disposable NAT Gateway for Cost-Effective and Secure AWS Networking
 This project provides a disposable NAT Gateway solution designed to lower costs and improve security in AWS environments. The NAT Gateway is created only for a defined time window and automatically destroyed afterward. This model fully utilizes AWS’s pay-as-you-go pricing, ensuring that you only pay for the NAT Gateway while it’s actually needed.
@@ -105,6 +109,8 @@ There are 4 parameters that you should provide to the cloudformation template:
 4. **DeleteNATGWScheduleExpression:** A cron schedule expression for deleting the NAT Gateway.
    - Same as above, but for deleting the NAT Gateway.
 
+---
+
 ### How to deploy:
 Fetch the cloudformation template & its parameters file from this repository:
 ```bash
@@ -130,6 +136,8 @@ Or using the AWS Management Console:
 **Parameters example:**
 
 <img src="readme-files/cf-using-console.png" alt="CloudFormation Parameters" width="800"/>
+
+---
 
 ### Cron schedule expression cheatsheet:
 
@@ -165,6 +173,8 @@ Or using the AWS Management Console:
 | Every Monday and Wednesday at 9 AM UTC | cron(0 9 ? * 2,4 *) |
 | Every 10th of the month at 6 AM UTC | cron(0 6 10 * ? *) |
 | Every Friday at 11:30 PM UTC | cron(30 23 ? * 6 *) |
+
+---
 
 ### Further Work & Optimisation
 - Add a CloudWatch alarm to monitor the NAT Gateway and notify when it is created or deleted.
