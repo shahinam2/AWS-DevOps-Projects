@@ -15,7 +15,7 @@ Project 8: Polyglot Pipeline
 ---
 
 ### Architecture
-<img src="readme-files/PolyglotPipeline-Architecture.gif" alt="Polyglot Pipeline Architecture" width="1000"/>
+<img src="readme-files/PolyglotPipeline-Architecture-2.gif" alt="Polyglot Pipeline Architecture" width="1000"/>
 
 ---
 
